@@ -1,19 +1,32 @@
 #include <Arduino.h>
 #include "gui/gui.h"
+#include "SPIFFS.h"
 void setup()
 {
     Serial.begin(115200);
-    guiSetUp();
     pinMode(22, OUTPUT);
+    if (!SPIFFS.begin()){
+        log_e("SPIFFS Mount Failed");
+    }else{
+        log_w("SPIFFS Mounted");
+        // File root = SPIFFS.open("/");
+        // File file = root.openNextFile(); 
+        // while(file){
+        //     Serial.print("FILE: ");
+        //     Serial.println(file.name());
+        //     file = root.openNextFile();
+        // }
+    }
+    guiSetUp();
 }
 
 void loop()
 {
-    
-    log_w("Set to High");
+    // Serial.println(GIT_REV);
+    // log_w("Set to High");
     digitalWrite(22,HIGH);
-    vTaskDelay(3000);
-    log_w("Set to Low");
+    vTaskDelay(5);
+    // log_w("Set to Low");
     digitalWrite(22,LOW);
-    vTaskDelay(3000);
+    vTaskDelay(5);
 }

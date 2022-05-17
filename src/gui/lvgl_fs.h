@@ -1,3 +1,3 @@
-// #pragma once
+#pragma once
 
-// void lv_fs_init(void);
+void lv_fs_init(void);

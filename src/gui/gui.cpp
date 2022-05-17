@@ -9,10 +9,11 @@
 
 #include <lvgl.h>
 #include "lvgl_fs.h"
-#include "fonts.h"
 #include "mainTabView.h"
 #include "nvs_flash.h"
 #include "nvs.h"
+#include "stringtable.h"
+
 // extern "C" void lv_log_register_print_cb(lv_log_print_g_cb_t print_cb);
 extern nvs_handle nvs_main_handle;
 
@@ -22,7 +23,6 @@ static const uint16_t screenHeight = TFT_HEIGHT;
 static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf[ screenWidth * 10 ];
 
-const lv_font_t* p_custom_font;
 lv_style_t s_font_10_blk;
 lv_style_t s_font_12_blk;
 lv_style_t s_font_14_blk;
@@ -67,6 +67,20 @@ TaskHandle_t lvgl_Task_Handle;
 // int32_t mark = 0;
 static void lvgl_task(TimerHandle_t xTimer)
 {
+    lv_fs_init();
+    strings::kh_load_all_font();
+
+    lv_obj_t * label = lv_label_create(lv_scr_act());
+    strings::kh_fonttool_set_lang(strings::Chinese);
+    lv_label_set_text(label,strings::kh_fonttool_get_text(strings::Language));
+    log_w("%s",strings::kh_fonttool_get_text(strings::Language));
+    lv_obj_center(label);
+    lv_font_t* tmp = nullptr;
+    tmp = strings::kh_fonttool_get_font(strings::Language);
+    if (tmp == nullptr){
+    }else{
+        lv_obj_set_style_text_font(label,tmp,0);
+    }
     // static uint32_t lastwake = 0;
     while (1)
     {
@@ -120,19 +134,13 @@ void guiSetUp(){
     disp_drv.draw_buf = &draw_buf;
     lv_disp_drv_register( &disp_drv );
 
-    // Start init layout
-    // lv_layout_init();
-    lv_obj_t * label = lv_label_create(lv_scr_act());
-    lv_label_set_text(label,"Hello World!");
-    lv_obj_center(label);
-
     xTaskCreatePinnedToCore(lvgl_task,
                             "LVGL FreeRTOS Timer",
                             8192,
                             nullptr,
-                            1,
+                            0,
                             &lvgl_Task_Handle,
-                            tskNO_AFFINITY);
+                            1);
 
 }
 
