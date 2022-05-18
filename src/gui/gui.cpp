@@ -9,31 +9,17 @@
 
 #include <lvgl.h>
 #include "lvgl_fs.h"
-#include "mainTabView.h"
-#include "nvs_flash.h"
-#include "nvs.h"
+
 #include "stringtable.h"
 
-// extern "C" void lv_log_register_print_cb(lv_log_print_g_cb_t print_cb);
-extern nvs_handle nvs_main_handle;
-
-// static vars
 static const uint16_t screenWidth  = TFT_WIDTH;
 static const uint16_t screenHeight = TFT_HEIGHT;
 static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf[ screenWidth * 10 ];
-
-lv_style_t s_font_10_blk;
-lv_style_t s_font_12_blk;
-lv_style_t s_font_14_blk;
-
-// TFT_eSPI tft = TFT_eSPI(screenWidth, screenHeight); /* TFT instance */
-// 草，TFT_eSPI/TFT_Drivers/ILI9341_Defines.h 里面，#define TFT_WIDTH  240 #define TFT_HEIGHT 320，也就是长宽是按照rotation = 0的情况区分的，所以。。lvgl给的
-// example里面screenWidth  = 320; screenHeight = 240;不适用于我们买的这个，你看lvgl里面又弄了rotation=1。。。
-// 如果这样初始化，会导致长短边scale互换（不是xy互换！）
+TaskHandle_t lvgl_Task_Handle;
+SemaphoreHandle_t lvgl_lock;
 
 TFT_eSPI tft = TFT_eSPI(); /* TFT instance */
-TimerHandle_t lv_timer = nullptr;
 
 #if LV_USE_LOG != 0
 #if LV_LOG_PRINTF == 0
@@ -62,11 +48,9 @@ static void my_disp_flush( lv_disp_drv_t *disp, const lv_area_t *area, lv_color_
     lv_disp_flush_ready( disp );
 }
 
-
-TaskHandle_t lvgl_Task_Handle;
-// int32_t mark = 0;
 static void lvgl_task(TimerHandle_t xTimer)
 {
+    xSemaphoreTake(lvgl_lock,portMAX_DELAY);
     lv_fs_init();
     strings::kh_load_all_font();
 
@@ -75,29 +59,21 @@ static void lvgl_task(TimerHandle_t xTimer)
     lv_label_set_text(label,strings::kh_fonttool_get_text(strings::Language));
     log_w("%s",strings::kh_fonttool_get_text(strings::Language));
     lv_obj_center(label);
-    lv_font_t* tmp = nullptr;
+    const lv_font_t* tmp = nullptr;
     tmp = strings::kh_fonttool_get_font(strings::Language);
     if (tmp == nullptr){
     }else{
         lv_obj_set_style_text_font(label,tmp,0);
     }
-    // static uint32_t lastwake = 0;
+    xSemaphoreGive(lvgl_lock);
     while (1)
     {
-        lv_timer_handler(); /* let the GUI do its work */
+        if (xSemaphoreTake(lvgl_lock,0) == pdTRUE) //give up timer handle if didn't get the lock
+            lv_timer_handler(); /* let the GUI do its work */
         vTaskDelay(pdMS_TO_TICKS(5));
     }
     
 }
-
-/**
- * @brief here we init default screen's layout
- * 
- */
-static void lv_layout_init(){
-    lv_main_tabview_init();
-}
-
 
 /**
  * @brief set up all gui stuff:
@@ -110,6 +86,7 @@ static void lv_layout_init(){
  * 
  */
 void guiSetUp(){
+    
     // Begin set tft_espi
     tft.begin();          /* TFT init */
     tft.setRotation( 4 ); /* Landscape orientation, flipped */
@@ -117,6 +94,7 @@ void guiSetUp(){
 
 
     // Begin init lvgl
+    lvgl_lock = xSemaphoreCreateMutex();
     lv_init();
 #if LV_USE_LOG != 0
 #if LV_LOG_PRINTF == 0
@@ -133,6 +111,7 @@ void guiSetUp(){
     disp_drv.flush_cb = my_disp_flush;
     disp_drv.draw_buf = &draw_buf;
     lv_disp_drv_register( &disp_drv );
+    xSemaphoreGive(lvgl_lock);
 
     xTaskCreatePinnedToCore(lvgl_task,
                             "LVGL FreeRTOS Timer",

@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "lv_font_conv": "^1.5.2",
+    "lv_i18n": "^0.2.1",
     "lv_img_conv": "^0.2.1"
   }
 }

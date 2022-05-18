@@ -11,7 +11,7 @@ namespace strings
 {
     typedef struct {
         const char * text;
-        fonttype ** fontptr_ptr;
+        const fonttype * fontptr;
     } kh_textdata_t;
     typedef enum : uint8_t{
         English, Chinese,  EndOfLanguages
@@ -39,7 +39,7 @@ namespace strings
      * @param id ID of the text
      * @return const fonttype* 
      */
-    fonttype * kh_fonttool_get_font(ID id);
+    const fonttype * kh_fonttool_get_font(ID id);
 
     /**
      * @brief Set the lang. The lib is volatile so saving data to storage yourself
