@@ -1,56 +1,67 @@
-// #include <Arduino.h>
-// #include "gui/gui.h"
-// #include "SPIFFS.h"
-// void setup()
-// {
-//     Serial.begin(115200);
-//     pinMode(22, OUTPUT);
-//     // if (!SPIFFS.begin()){
-//     //     log_e("SPIFFS Mount Failed");
-//     // }else{
-//     //     log_w("SPIFFS Mounted");
-//     //     // File root = SPIFFS.open("/");
-//     //     // File file = root.openNextFile(); 
-//     //     // while(file){
-//     //     //     Serial.print("FILE: ");
-//     //     //     Serial.println(file.name());
-//     //     //     file = root.openNextFile();
-//     //     // }
-//     // }
-//     guiSetUp();
-// }
-
-// void loop()
-// {
-//     // Serial.println(GIT_REV);
-//     // log_w("Set to High");
-//     digitalWrite(22,HIGH);
-//     vTaskDelay(5);
-//     // log_w("Set to Low");
-//     digitalWrite(22,LOW);
-//     vTaskDelay(5);
-// }
-
-// //--------------------------------
 #include <Arduino.h>
 #include "gui/gui.h"
 #include "SPIFFS.h"
-static const int LEFT_PIN=14;
-static const int CENTER_PIN=21;
-static const int RIGHT_PIN=27;
+#include "button.h"
+button mybutton1({14},1,{buttonDefaultConfig});
+button mybutton2({21},2,{buttonDefaultConfig});
+button mybutton3({27},3,{buttonDefaultConfig});
 void setup()
 {
-    Serial.begin(115200);
-    pinMode(LEFT_PIN, INPUT);
-    pinMode(CENTER_PIN, INPUT);
-    pinMode(RIGHT_PIN, INPUT);
+    // Serial.begin(115200);
+    ButtonEventHandler = [](ButtonEventInfo info){
+        log_w("Got btn%d eventNum%d",info.ButtonId,info.ClickType);
+    };
+    button::setUp(buttonDefaultSetup);
+    
+    // pinMode(22, OUTPUT);
+    // if (!SPIFFS.begin()){
+    //     log_e("SPIFFS Mount Failed");
+    // }else{
+    //     log_w("SPIFFS Mounted");
+    //     // File root = SPIFFS.open("/");
+    //     // File file = root.openNextFile(); 
+    //     // while(file){
+    //     //     Serial.print("FILE: ");
+    //     //     Serial.println(file.name());
+    //     //     file = root.openNextFile();
+    //     // }
+    // }
+    // guiSetUp();
 }
 
 void loop()
 {
-    log_w("left:%d right:%d center:%d",digitalRead(LEFT_PIN),digitalRead(RIGHT_PIN),digitalRead(CENTER_PIN));
+    // printf("%d\n",GPIO_ns::Read({14}));
     vTaskDelay(1000);
+    // Serial.println(GIT_REV);
+    // log_w("Set to High");
+    // digitalWrite(22,HIGH);
+    // vTaskDelay(5);
+    // // log_w("Set to Low");
+    // digitalWrite(22,LOW);
+    // vTaskDelay(5);
 }
+
+// //--------------------------------
+// #include <Arduino.h>
+// #include "gui/gui.h"
+// #include "SPIFFS.h"
+// static const int LEFT_PIN=14;
+// static const int CENTER_PIN=21;
+// static const int RIGHT_PIN=27;
+// void setup()
+// {
+//     Serial.begin(115200);
+//     pinMode(LEFT_PIN, INPUT);
+//     pinMode(CENTER_PIN, INPUT);
+//     pinMode(RIGHT_PIN, INPUT);
+// }
+
+// void loop()
+// {
+//     log_w("left:%d right:%d center:%d",digitalRead(LEFT_PIN),digitalRead(RIGHT_PIN),digitalRead(CENTER_PIN));
+//     vTaskDelay(1000);
+// }
 
 // //--------------------------------
 

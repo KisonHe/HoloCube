@@ -1,5 +1,19 @@
 {
     "files.associations": {
-        "lv_log.h": "c"
+        "lv_log.h": "c",
+        "array": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "vector": "cpp",
+        "initializer_list": "cpp",
+        "system_error": "cpp",
+        "functional": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp",
+        "cstdint": "cpp",
+        "new": "cpp"
     }
 }
