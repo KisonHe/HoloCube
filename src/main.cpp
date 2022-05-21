@@ -13,7 +13,7 @@ void setup()
     };
     button::setUp(buttonDefaultSetup);
     
-    // pinMode(22, OUTPUT);
+    pinMode(22, OUTPUT);
     // if (!SPIFFS.begin()){
     //     log_e("SPIFFS Mount Failed");
     // }else{
@@ -26,20 +26,20 @@ void setup()
     //     //     file = root.openNextFile();
     //     // }
     // }
-    // guiSetUp();
+    guiSetUp();
 }
 
 void loop()
 {
     // printf("%d\n",GPIO_ns::Read({14}));
-    vTaskDelay(1000);
+    // vTaskDelay(1000);
     // Serial.println(GIT_REV);
     // log_w("Set to High");
-    // digitalWrite(22,HIGH);
-    // vTaskDelay(5);
-    // // log_w("Set to Low");
-    // digitalWrite(22,LOW);
-    // vTaskDelay(5);
+    digitalWrite(22,HIGH);
+    vTaskDelay(5);
+    // log_w("Set to Low");
+    digitalWrite(22,LOW);
+    vTaskDelay(5);
 }
 
 // //--------------------------------
