@@ -1,12 +1,23 @@
-// app will have a class/struct.
-// the manager will manage running, similar to robomaster code, will have states and exits.
-// running app can ask for switching app with provided app_ptr also passing a intent ptr.
+/**
+ * @file maganer.cpp
+ * @author kisonhe (kisonhepenpal@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2022-05-22
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
 
 #include "maganer.h"
 #include "app.h"
 #include "mainmenu_app.h"
-static app* now_app = nullptr;
+namespace app_manager{
+
+static app_t* now_app = nullptr;
 static bool inited = false;
+// static app* default_app = 
 /**
  * @brief should be called first
  * 
@@ -14,9 +25,13 @@ static bool inited = false;
 void manager_init(){
     if (inited)
         return;
+    if (mainmenu_app_t::mainmenu_app_ptr!=nullptr)
+        mainmenu_app_t::mainmenu_app_ptr = new mainmenu_app_t();
     // now_app = mainmenuapp's address
 }
 
 void manager_handle(){
     
+}
+
 }

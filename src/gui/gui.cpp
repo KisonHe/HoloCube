@@ -9,7 +9,7 @@
 
 #include <lvgl.h>
 #include "lvgl_fs.h"
-
+#include "app/maganer.h"
 #include "stringtable.h"
 
 static const uint16_t screenWidth  = TFT_WIDTH;

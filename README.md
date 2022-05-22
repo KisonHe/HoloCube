@@ -3,37 +3,13 @@
 npm i lv_font_conv 
 npm i lv_img_conv
 ```
+## OTA
+参考 
+1. https://docs.platformio.org/en/latest/platforms/espressif32.html#over-the-air-ota-update
+2. https://github.com/platformio/bintray-secure-ota
 
+2的这个repo基本就是想做的了（
 
-有如下code
-```c++
-class X
-{
-public:
-    X(int arg);
-    X() = delete;
-    ~X();
-};
-```
+有空了仔细看一下，看是否能用github actions自动化掉
 
-为什么`X x1();`可以编译?(`X x1;`是期望的不能编译)
-
-
-```
-class X
-{ 
-public:
-    X(int) {}
-    X() = delete; // will never be generated
-    void foo(){printf("foo");}
-};
-
-int main()
-{ 
-    X x;        // will not compile， expected;
-    X y(1);     // will compile, expected.
-    X z();      // can compile, what is z?.
-    y.foo();    
-    return 0;
-}
-```
+我草，pio真牛逼，test也还没有看
