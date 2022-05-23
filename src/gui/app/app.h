@@ -46,7 +46,7 @@ public:
      * @param screen 
      * @return TickType_t how many ticks later the handle has to be called
      */
-    virtual TickType_t init(TickType_t tick, intent_t&& intent, lv_obj_t* screen) = 0;
+    virtual TickType_t init(TickType_t tick, intent_t& intent, lv_obj_t* screen) = 0;
     virtual TickType_t handle(TickType_t tick) = 0;
     virtual void deinit(TickType_t tick) = 0;
     app_t(bool if_push_2_list);

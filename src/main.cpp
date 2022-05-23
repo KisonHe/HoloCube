@@ -16,7 +16,8 @@ void setup()
     pinMode(22, OUTPUT);
     // if (!SPIFFS.begin()){
     //     log_e("SPIFFS Mount Failed");
-    // }else{
+    // }
+    // else{
     //     log_w("SPIFFS Mounted");
     //     // File root = SPIFFS.open("/");
     //     // File file = root.openNextFile(); 

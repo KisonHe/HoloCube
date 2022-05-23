@@ -10,6 +10,9 @@
  */
 #include "app.h"
 #include <algorithm>
+
+std::vector<app_t*> app_t::app_list;
+
 app_t::app_t(bool if_push_2_list)
 {
     //push self to app list

@@ -9,3 +9,10 @@
  * 
  */
 #include "app.h"
+
+namespace app_manager{
+    void manager_init();
+    void manager_handle();
+    esp_err_t app_pass_intent(intent_t intent);
+    esp_err_t app_exit();
+}

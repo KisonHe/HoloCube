@@ -52,9 +52,14 @@ void manager_init(){
         ESP_LOGE(TAG,"When initing, screen is not nullptr! Will not clean screen");
     }else{
         now_app_config.screen = lv_obj_create(nullptr);
+        if (now_app_config.screen == nullptr){
+            ESP_LOGE(TAG,"Fail to create screen");
+        }
     }
-    // intent_t init_intent = {}
-    now_app_config.now_app->init(xTaskGetTickCount(),intent_t{nullptr,now_app_config.now_app,nullptr},now_app_config.screen);
+    lv_scr_load(now_app_config.screen);
+    ESP_LOGD(TAG,"Loaded screen");
+    intent_t init_intent = {nullptr,now_app_config.now_app,nullptr};
+    now_app_config.now_app->init(xTaskGetTickCount(),init_intent,now_app_config.screen);
     inited = true;
 }
 
@@ -65,4 +70,27 @@ void manager_handle(){
     }
     now_app_config.now_app->handle(xTaskGetTickCount());
 }
+
+/**
+ * @brief The api an app calls for switching app.
+ * 
+ * @param intent 
+ * @return esp_err_t 
+ */
+esp_err_t app_pass_intent(intent_t intent){
+    //TODO
+    return ESP_OK;
+
+}
+
+/**
+ * @brief The api an app calls if it want to quit TO Menu
+ * Just a wrapper of app_pass_intent
+ * 
+ * @return esp_err_t 
+ */
+esp_err_t app_exit(){
+
+}
+
 }
