@@ -13,9 +13,28 @@
 #include "maganer.h"
 #include "app.h"
 #include "mainmenu_app.h"
+#include "lvgl.h"
+#include "FreeRTOS.h"
+#include "esp32-hal-log.h"
+
+static const char* TAG = "manager";
 namespace app_manager{
 
-static app_t* now_app = nullptr;
+enum State_t{
+    Init,
+    Running,
+    Quit
+};
+
+struct now_app_config_t
+{
+    mainmenu_app_t* now_app = nullptr;
+    // logo shown to user, should be no more than 128x128
+    State_t state = Init;
+    lv_obj_t* screen = nullptr;
+};
+
+static now_app_config_t now_app_config;
 static bool inited = false;
 // static app* default_app = 
 /**
@@ -25,13 +44,25 @@ static bool inited = false;
 void manager_init(){
     if (inited)
         return;
-    if (mainmenu_app_t::mainmenu_app_ptr!=nullptr)
-        mainmenu_app_t::mainmenu_app_ptr = new mainmenu_app_t();
-    // now_app = mainmenuapp's address
+    if (now_app_config.now_app != nullptr){
+        ESP_LOGE(TAG,"When initing, now_app is not nullptr! Will not run now_app's deinit");
+    }
+    now_app_config.now_app = mainmenu_app_t::get_mainmenu_app_ptr();
+    if (now_app_config.screen != nullptr){
+        ESP_LOGE(TAG,"When initing, screen is not nullptr! Will not clean screen");
+    }else{
+        now_app_config.screen = lv_obj_create(nullptr);
+    }
+    // intent_t init_intent = {}
+    now_app_config.now_app->init(xTaskGetTickCount(),intent_t{nullptr,now_app_config.now_app,nullptr},now_app_config.screen);
+    inited = true;
 }
 
 void manager_handle(){
-    
+    if (now_app_config.now_app == nullptr){
+        ESP_LOGE(TAG,"Running manager_handle but now_app is nullptr");
+        now_app_config.now_app = mainmenu_app_t::get_mainmenu_app_ptr();
+    }
+    now_app_config.now_app->handle(xTaskGetTickCount());
 }
-
 }
