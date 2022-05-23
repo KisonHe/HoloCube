@@ -18,11 +18,11 @@ namespace strings
     }Language_t;
 
     typedef enum : uint16_t {
-        Language, DoneIcon, MoreVertIcon, FirmwareVersion, LanguageName,  EndOfTexts
+        Language, LanguageName, NoApp,  EndOfTexts
     }ID;
 
     enum FontID : uint8_t {
-        ui, ui_25, icon, icon_17,  EndOfFonts
+        ui, ui_25,  EndOfFonts
     };
 
     /**

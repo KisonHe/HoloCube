@@ -58,6 +58,8 @@ static void lvgl_task(TimerHandle_t xTimer)
     // lv_style_init(&default_style);
     // lv_style_set_bg_color(&default_style, lv_color_black());
     // lv_style_set_text_color(&default_style,lv_color_white());
+    strings::kh_load_all_font();
+    strings::kh_fonttool_set_lang(strings::English);
 
 
     // strings::kh_load_all_font();

@@ -23,6 +23,7 @@ struct app_info_t
     char* name = nullptr; //might change, like a lang change so not const
     // logo shown to user, should be no more than 128x128
     lv_obj_t * logo = nullptr;
+    lv_obj_t* tabview_ptr = nullptr;
 };
 
 struct intent_t;
@@ -30,10 +31,14 @@ struct intent_t;
 class app_t
 {
 private:
+    
+protected:
     /* data */
     static std::vector<app_t*> app_list;
-    app_config_t* app_config_ptr;
-    app_info_t* app_info_ptr;
+    app_config_t* app_config_ptr = nullptr;
+    app_info_t* app_info_ptr = nullptr;;
+    lv_obj_t* app_screen = nullptr;
+
 public:
     // 普通app在init或者handle调用switch app或者exit (exit其实就是switch app)，app会产生一个intent,这个部分使用
     // copy,因为deinit要等到这次handle/init推出才run,deinit结束才是下一个app的init,此时intent可能生命周期结束

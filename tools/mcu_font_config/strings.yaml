@@ -13,14 +13,14 @@ Fonts:
     Size: 25
     Symbol: 0123456789:!., 
     bpp: 4 
-  - Name: icon # You can set icon as well!
-    TTF: /home/kisonhe/Downloads/MaterialIcons-Regular.ttf
-    Size: 30
-    bpp: 4 
-  - Name: icon-17
-    TTF: /home/kisonhe/Downloads/MaterialIcons-Regular.ttf
-    Size: 17
-    bpp: 4 
+  # - Name: icon # You can set icon as well!
+  #   TTF: /home/kisonhe/Downloads/MaterialIcons-Regular.ttf
+  #   Size: 30
+  #   bpp: 4 
+  # - Name: icon-17
+  #   TTF: /home/kisonhe/Downloads/MaterialIcons-Regular.ttf
+  #   Size: 17
+  #   bpp: 4 
 
 Strings: 
   - ID: Language # Alias name for how you get the text
@@ -30,21 +30,21 @@ Strings:
     Content-Chinese:
       Font: ui-25
       Value: 语言 # Chinese ver. Note if some language lack translate, tool only warn at runtime. Generated file will return string's name. Language, In this case.
-  - ID: DoneIcon
-    Content-all:    # Translate for all Languages
-      Font: icon
-      Value: "\ue876"
-  - ID: MoreVertIcon
-    Content-all:    # Translate for all Languages
-      Font: icon-17
-      Value: "\ue5d4"
-  - ID: FirmwareVersion
-    Content-English:
-      Font: ui
-      Value: "Firmware: %s"
-    Content-Chinese:
-      Font: ui
-      Value: "固件版本 %s"
+  # - ID: DoneIcon
+  #   Content-all:    # Translate for all Languages
+  #     Font: icon
+  #     Value: "\ue876"
+  # - ID: MoreVertIcon
+  #   Content-all:    # Translate for all Languages
+  #     Font: icon-17
+  #     Value: "\ue5d4"
+  # - ID: FirmwareVersion
+  #   Content-English:
+  #     Font: ui
+  #     Value: "Firmware: %s"
+  #   Content-Chinese:
+  #     Font: ui
+  #     Value: "固件版本 %s"
   - ID: LanguageName
     Content-English:
       Font: ui-25
@@ -52,3 +52,10 @@ Strings:
     Content-Chinese:
       Font: ui-25
       Value: 简体中文
+  - ID: NoApp
+    Content-English:
+      Font: ui-25
+      Value: No apps found
+    Content-Chinese:
+      Font: ui-25
+      Value: 没有安装任何应用
