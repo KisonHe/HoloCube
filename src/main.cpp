@@ -27,7 +27,7 @@ void setup()
     //     //     file = root.openNextFile();
     //     // }
     // }
-    guiSetUp();
+    guiSetUp();digitalWrite(22,HIGH);
 }
 
 void loop()
@@ -39,8 +39,8 @@ void loop()
     digitalWrite(22,HIGH);
     vTaskDelay(5);
     // log_w("Set to Low");
-    digitalWrite(22,LOW);
-    vTaskDelay(5);
+    // digitalWrite(22,LOW);
+    // vTaskDelay(5);
 }
 
 // //--------------------------------

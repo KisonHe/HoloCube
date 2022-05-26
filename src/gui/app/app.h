@@ -22,8 +22,7 @@ struct app_info_t
     // the name shown below your logo to user. should be short, length is not checked
     char* name = nullptr; //might change, like a lang change so not const
     // logo shown to user, should be no more than 128x128
-    lv_obj_t * logo = nullptr;
-    lv_obj_t* tabview_ptr = nullptr;
+    lv_obj_t*& logo;
 };
 
 struct intent_t;
@@ -34,6 +33,7 @@ private:
     
 protected:
     /* data */
+    // Note: Must set these
     static std::vector<app_t*> app_list;
     app_config_t* app_config_ptr = nullptr;
     app_info_t* app_info_ptr = nullptr;;
@@ -54,7 +54,8 @@ public:
     virtual TickType_t init(TickType_t tick, intent_t& intent, lv_obj_t* screen) = 0;
     virtual TickType_t handle(TickType_t tick) = 0;
     virtual void deinit(TickType_t tick) = 0;
-    app_t(bool if_push_2_list);
+    app_info_t* get_app_info_ptr();
+    app_t(bool if_push_2_list, app_config_t* app_config_ptr, app_info_t* app_info_ptr);
     ~app_t();
 };
 
@@ -66,5 +67,3 @@ struct intent_t
     char* msg;  //Arduino json?
     //data,last_app,current_app etc. last_app在manager那里检查一下,确保是正确的
 };
-
-

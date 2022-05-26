@@ -13,7 +13,11 @@
 
 std::vector<app_t*> app_t::app_list;
 
-app_t::app_t(bool if_push_2_list)
+app_info_t* app_t::get_app_info_ptr(){
+    return app_info_ptr;
+}
+
+app_t::app_t(bool if_push_2_list, app_config_t* app_config_ptr, app_info_t* app_info_ptr):app_config_ptr(app_config_ptr), app_info_ptr(app_info_ptr)
 {
     //push self to app list
     if (if_push_2_list){
