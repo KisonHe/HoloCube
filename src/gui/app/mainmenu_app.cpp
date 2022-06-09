@@ -36,6 +36,11 @@ TickType_t mainmenu_app_t::init(TickType_t tick, intent_t& intent, lv_obj_t* scr
     ESP_LOGD(TAG,"app_list is %d long",app_t::app_list.size());
     app_screen = screen;
 
+    lv_style_init(&default_style);
+    lv_style_set_bg_color(&default_style, lv_color_black());
+    lv_style_set_text_color(&default_style,lv_color_white());
+    lv_obj_add_style(app_screen,&default_style,LV_STATE_DEFAULT);
+
     if (app_t::app_list.size() < 1){
         //no apps
         show_no_app();
@@ -74,19 +79,21 @@ TickType_t mainmenu_app_t::handle(TickType_t tick){
 void mainmenu_app_t::deinit(TickType_t tick){
 
 }
-LV_IMG_DECLARE(google);
+LV_IMG_DECLARE(warn_logo);
 void mainmenu_app_t::show_no_app(){
     // log_d("mainmenu_app_t::init with tick%d,screen%x",tick,screen);
     //-------------
-    lv_obj_t* ret = lv_obj_create(app_screen);
+    // lv_obj_t* ret = lv_obj_create(app_screen);
+    lv_obj_t* ret = app_screen;
     //make ret max size with no margins, like a container in lvgl 7, 
 
     lv_obj_t* app_image = lv_img_create(ret);
-    lv_img_set_src(app_image, &google);
+    lv_img_set_src(app_image, &warn_logo);
     lv_obj_align(app_image, LV_ALIGN_CENTER, 0, 0);
     lv_obj_t* app_name = lv_label_create(ret);
     lv_obj_add_style(ret, &default_style, 0); // todo selector
-    lv_label_set_text(app_name, "app_name"); // todo set font also,maybe need to change the struct
+    lv_label_set_text(app_name, "No apps installed"); // todo set font also,maybe need to change the struct
+    lv_obj_align_to(app_name, app_image, LV_ALIGN_OUT_BOTTOM_MID,0,0);
 
     //-------------
 
