@@ -2,12 +2,14 @@
 #include "gui/gui.h"
 #include "SPIFFS.h"
 #include "button.h"
+#include "gui/app/app.h"
 button mybutton1({14},1,{buttonDefaultConfig});
 button mybutton2({21},2,{buttonDefaultConfig});
 button mybutton3({27},3,{buttonDefaultConfig});
 void setup()
 {
     // Serial.begin(115200);
+    log_w("in setup app_list %x is %d long",&app_t::app_list,app_t::app_list.size());
     ButtonEventHandler = [](ButtonEventInfo info){
         log_w("Got btn%d eventNum%d",info.ButtonId,info.ClickType);
     };

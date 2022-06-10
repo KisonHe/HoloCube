@@ -11,6 +11,9 @@
 #include "lvgl_fs.h"
 #include "app/maganer.h"
 #include "stringtable.h"
+#include "style/style.h"
+
+#include "app/helloworld_app/helloworld_app.h"
 
 static const uint16_t screenWidth  = TFT_WIDTH;
 static const uint16_t screenHeight = TFT_HEIGHT;
@@ -58,13 +61,14 @@ static void lvgl_task(TimerHandle_t xTimer)
     // lv_style_init(&default_style);
     // lv_style_set_bg_color(&default_style, lv_color_black());
     // lv_style_set_text_color(&default_style,lv_color_white());
+    load_common_style();
     strings::kh_load_all_font();
     strings::kh_fonttool_set_lang(strings::English);
 
 
     // strings::kh_load_all_font();
     ESP_LOGD(TAG,"Cleaning lv_scr_act()");
-    lv_obj_clean(lv_scr_act());
+    lv_obj_del(lv_scr_act());
     ESP_LOGD(TAG,"Initing app_manager");
     app_manager::manager_init();
     ESP_LOGD(TAG,"Done");
@@ -140,6 +144,8 @@ void guiSetUp(){
                             0,
                             &lvgl_Task_Handle,
                             1);
+
+    main_helloworld_app.handle(0); // avoid o3
 
 }
 

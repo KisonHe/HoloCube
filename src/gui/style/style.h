@@ -1,6 +1,6 @@
 #pragma once
 #include "lvgl.h"
 
-void load_common_style(){
-    
-}
+extern lv_style_t default_style;
+
+void load_common_style();

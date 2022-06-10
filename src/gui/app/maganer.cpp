@@ -28,7 +28,7 @@ enum State_t{
 
 struct now_app_config_t
 {
-    mainmenu_app_t* now_app = nullptr;
+    app_t* now_app = nullptr;
     // logo shown to user, should be no more than 128x128
     State_t state = Init;
     lv_obj_t* screen = nullptr;
@@ -62,25 +62,34 @@ void manager_init(){
     now_app_config.now_app->init(xTaskGetTickCount(),init_intent,now_app_config.screen);
     inited = true;
 }
-
+/**
+ * @brief 
+ * 
+ */
 void manager_handle(){
     if (now_app_config.now_app == nullptr){
-        ESP_LOGE(TAG,"Running manager_handle but now_app is nullptr");
-        now_app_config.now_app = mainmenu_app_t::get_mainmenu_app_ptr();
+        ESP_LOGE(TAG,"Running manager_handle but now_app is nullptr, refuse to run anything");
+        return;
     }
     now_app_config.now_app->handle(xTaskGetTickCount());
 }
 
 /**
- * @brief The api an app calls for switching app.
+ * @brief The api an app calls for switching app. Should be called only from init or handle for thread safety
  * 
  * @param intent 
  * @return esp_err_t 
  */
 esp_err_t app_pass_intent(intent_t intent){
     //TODO
+    // call last app's deinit
+    now_app_config.now_app->deinit(xTaskGetTickCount());
+    // clean last app's screen. Note lv_obj_clean(obj) only del obj's child. 
+    // lv_obj_del also delete the obj
+    lv_obj_clean(now_app_config.screen);
+    now_app_config.now_app = intent.target_app;
+    intent.target_app->init(xTaskGetTickCount(), intent, now_app_config.screen);
     return ESP_OK;
-
 }
 
 /**
@@ -90,7 +99,8 @@ esp_err_t app_pass_intent(intent_t intent){
  * @return esp_err_t 
  */
 esp_err_t app_exit(){
-
+    intent_t exit_intent = {now_app_config.now_app,mainmenu_app_t::get_mainmenu_app_ptr(),nullptr};
+    return app_pass_intent(exit_intent);
 }
 
 }

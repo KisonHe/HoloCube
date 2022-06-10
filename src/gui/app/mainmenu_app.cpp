@@ -11,9 +11,9 @@
 #include "mainmenu_app.h"
 #include "esp32-hal-log.h"
 #include "../stringtable.h"
+#include "../style/style.h"
 
 mainmenu_app_t mainmenu_app;
-static lv_style_t default_style;
 lv_obj_t* mainmenu_app_t::now_app_container = nullptr;
 mainmenu_app_t* mainmenu_app_t::mainmenu_app_ptr = nullptr;
 mainmenu_app_t::mainmenu_app_t(/* args */):app_t(false,nullptr,nullptr){  
@@ -33,12 +33,10 @@ mainmenu_app_t* mainmenu_app_t::get_mainmenu_app_ptr(){
 }
 
 TickType_t mainmenu_app_t::init(TickType_t tick, intent_t& intent, lv_obj_t* screen){
-    ESP_LOGD(TAG,"app_list is %d long",app_t::app_list.size());
+    ESP_LOGD(TAG,"app_list %x is %d long",&app_list,app_list.size());
     app_screen = screen;
 
-    lv_style_init(&default_style);
-    lv_style_set_bg_color(&default_style, lv_color_black());
-    lv_style_set_text_color(&default_style,lv_color_white());
+    
     lv_obj_add_style(app_screen,&default_style,LV_STATE_DEFAULT);
 
     if (app_t::app_list.size() < 1){
