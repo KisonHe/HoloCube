@@ -33,6 +33,7 @@ public:
     static mainmenu_app_t* get_mainmenu_app_ptr();
     TickType_t init(TickType_t tick, intent_t& intent, lv_obj_t* screen);
     TickType_t handle(TickType_t tick);
+    void init_app_info();
     void show_no_app();
     void deinit(TickType_t tick);
     mainmenu_app_t(/* args */);

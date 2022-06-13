@@ -9,7 +9,7 @@ button mybutton3({27},3,{buttonDefaultConfig});
 void setup()
 {
     // Serial.begin(115200);
-    log_w("in setup app_list %x is %d long",&app_t::app_list,app_t::app_list.size());
+    // log_w("in setup app_list %x is %d long",app_t::app_list_ptr,app_t::app_list_ptr->size());
     ButtonEventHandler = [](ButtonEventInfo info){
         log_w("Got btn%d eventNum%d",info.ButtonId,info.ClickType);
     };

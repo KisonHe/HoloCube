@@ -33,13 +33,13 @@ mainmenu_app_t* mainmenu_app_t::get_mainmenu_app_ptr(){
 }
 
 TickType_t mainmenu_app_t::init(TickType_t tick, intent_t& intent, lv_obj_t* screen){
-    ESP_LOGD(TAG,"app_list %x is %d long",&app_list,app_list.size());
+    ESP_LOGD(TAG,"app_list %x is %d long",app_list_ptr,app_list_ptr->size());
     app_screen = screen;
 
     
     lv_obj_add_style(app_screen,&default_style,LV_STATE_DEFAULT);
 
-    if (app_t::app_list.size() < 1){
+    if (app_t::app_list_ptr->size() < 1){
         //no apps
         show_no_app();
     }else{
@@ -53,25 +53,16 @@ TickType_t mainmenu_app_t::init(TickType_t tick, intent_t& intent, lv_obj_t* scr
         // }
 
         // 直接 show 最开始的app
-        now_app_container = create_app_ctr(screen,app_t::app_list[0]->get_app_info_ptr()); // todo how to track app's num, 切换时怎么跟踪下一个是谁
-
+        std::vector<app_t*>& vecRef = *app_list_ptr; // vector is not copied here
+        app_t* a = vecRef[0];
+        a->init_app_info();
+        now_app_container = create_app_ctr(screen,a->get_app_info_ptr()); // todo how to track app's num, 切换时怎么跟踪下一个是谁
     }
 
     return 1;
     
 }
 TickType_t mainmenu_app_t::handle(TickType_t tick){
-    // strings::kh_fonttool_set_lang(strings::Chinese);
-    // lv_label_set_text(label,strings::kh_fonttool_get_text(strings::Language));
-    // // log_w("%s",strings::kh_fonttool_get_text(strings::Language));
-    // lv_obj_center(label);
-    // const lv_font_t* tmp = nullptr;
-    // tmp = strings::kh_fonttool_get_font(strings::Language);
-    // if (tmp == nullptr){
-    //     ESP_LOGE(TAG,"Fail to load font");
-    // }else{
-    //     lv_obj_set_style_text_font(label,tmp,0);
-    // }
     return 1;
 }
 void mainmenu_app_t::deinit(TickType_t tick){
@@ -92,29 +83,6 @@ void mainmenu_app_t::show_no_app(){
     lv_obj_add_style(ret, &default_style, 0); // todo selector
     lv_label_set_text(app_name, "No apps installed"); // todo set font also,maybe need to change the struct
     lv_obj_align_to(app_name, app_image, LV_ALIGN_OUT_BOTTOM_MID,0,0);
-
-    //-------------
-
-    // lv_style_init(&default_style);
-    // lv_style_set_bg_color(&default_style, lv_color_black());
-    // lv_style_set_text_color(&default_style,lv_color_white());
-
-    // lv_obj_t * label = lv_label_create(app_screen);
-    // if (label == nullptr) log_e("Fail to create label");
-    // lv_obj_add_style(label,&default_style,LV_STATE_DEFAULT);
-    // lv_obj_add_style(app_screen,&default_style,LV_STATE_DEFAULT);
-    
-    
-    // lv_label_set_text(label,strings::kh_fonttool_get_text(strings::NoApp));
-    // log_w("%s",strings::kh_fonttool_get_text(strings::NoApp));
-    // lv_obj_center(label);
-    // const lv_font_t* tmp = nullptr;
-    // tmp = strings::kh_fonttool_get_font(strings::NoApp);
-    // if (tmp == nullptr){
-    //     ESP_LOGE(TAG,"Fail to load font");
-    // }else{
-    //     lv_obj_set_style_text_font(label,tmp,0);
-    // }
 }
 /**
  * @brief 记得clean掉原来的，不会主动clean
@@ -124,14 +92,21 @@ void mainmenu_app_t::show_no_app(){
  * @return lv_obj_t* 
  */
 lv_obj_t* mainmenu_app_t::create_app_ctr(lv_obj_t * parent, app_info_t* app_info){
-    lv_obj_t* ret = lv_obj_create(parent);
+    // lv_obj_t* ret = lv_obj_create(parent);
+    lv_obj_t* ret = parent;
     //make ret max size with no margins, like a container in lvgl 7, 
 
     lv_obj_t* app_image = lv_img_create(ret);
-    lv_img_set_src(app_image, app_info->logo);
+    lv_img_set_src(app_image, &app_info->logo);
     lv_obj_align(app_image, LV_ALIGN_CENTER, 0, 0);
     lv_obj_t* app_name = lv_label_create(ret);
     lv_obj_add_style(ret, &default_style, 0); // todo selector
-    lv_label_set_text(app_name, "app_name"); // todo set font also,maybe need to change the struct
+    lv_label_set_text(app_name, app_info->name); // todo set font also,maybe need to change the struct
+    lv_obj_align_to(app_name, app_image, LV_ALIGN_OUT_BOTTOM_MID,0,0);
     return ret;
 }
+/**
+ * @brief 用不到
+ * 
+ */
+void mainmenu_app_t::init_app_info(){}
