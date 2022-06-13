@@ -13,6 +13,7 @@
 namespace app_manager{
     void manager_init();
     void manager_handle();
+    app_t* get_now_running_app();
     esp_err_t app_pass_intent(intent_t intent);
     esp_err_t app_exit();
 }

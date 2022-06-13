@@ -145,7 +145,7 @@ void guiSetUp(){
                             &lvgl_Task_Handle,
                             1);
 
-    main_helloworld_app.handle(0); // avoid o3
+    // main_helloworld_app.handle(0); // avoid o3
 
 }
 

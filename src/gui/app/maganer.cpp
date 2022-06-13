@@ -103,4 +103,8 @@ esp_err_t app_exit(){
     return app_pass_intent(exit_intent);
 }
 
+app_t* get_now_running_app(){
+    return now_app_config.now_app;
+}
+
 }

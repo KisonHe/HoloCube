@@ -10,8 +10,8 @@ public:
     TickType_t handle(TickType_t tick);
     void deinit(TickType_t tick);
     void init_app_info();
-    helloworld_app(/* args */);
+    helloworld_app(app_info_t* app_info);
     ~helloworld_app();
 };
 
-extern helloworld_app main_helloworld_app;
+// extern helloworld_app main_helloworld_app;

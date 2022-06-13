@@ -31,17 +31,17 @@ class app_t
 {
 private:
 
-    
+// public:   
 protected:
     /* data */
     // Note: Must set these
-    // static std::vector<app_t*>* app_list_ptr;
+    static std::vector<app_t*>* app_list_ptr;
     app_config_t* app_config_ptr = nullptr;
     app_info_t* app_info_ptr = nullptr;;
     lv_obj_t* app_screen = nullptr;
 
 public:
-    static std::vector<app_t*>* app_list_ptr;
+    // static std::vector<app_t*>* app_list_ptr;
     // 普通app在init或者handle调用switch app或者exit (exit其实就是switch app)，app会产生一个intent,这个部分使用
     // copy,因为deinit要等到这次handle/init推出才run,deinit结束才是下一个app的init,此时intent可能生命周期结束
     // 但是init的intent是manager给的，因此没问题
