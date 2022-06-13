@@ -1,18 +1,17 @@
 #include <Arduino.h>
 #include "gui/gui.h"
 #include "SPIFFS.h"
-#include "button.h"
+#include "btn_cb.h"
 #include "gui/app/app.h"
-button mybutton1({14},1,{buttonDefaultConfig});
+// button mybutton1({14},1,{buttonDefaultConfig});
 button mybutton2({21},2,{buttonDefaultConfig});
 button mybutton3({27},3,{buttonDefaultConfig});
 void setup()
 {
     // Serial.begin(115200);
     // log_w("in setup app_list %x is %d long",app_t::app_list_ptr,app_t::app_list_ptr->size());
-    ButtonEventHandler = [](ButtonEventInfo info){
-        log_w("Got btn%d eventNum%d",info.ButtonId,info.ClickType);
-    };
+    // helloworld_app* main_helloworld_app = new helloworld_app(&hello_world_app_info);
+    ButtonEventHandler = indrv::btn_handler;
     button::setUp(buttonDefaultSetup);
     
     pinMode(22, OUTPUT);
