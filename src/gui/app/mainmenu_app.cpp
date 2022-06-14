@@ -15,6 +15,7 @@
 
 mainmenu_app_t mainmenu_app;
 lv_obj_t* mainmenu_app_t::now_app_container = nullptr;
+lv_obj_t* mainmenu_app_t::next_app_container = nullptr;
 mainmenu_app_t* mainmenu_app_t::mainmenu_app_ptr = nullptr;
 mainmenu_app_t::mainmenu_app_t(/* args */):app_t(false,nullptr,nullptr){  
     if (mainmenu_app_ptr!=nullptr){
@@ -65,22 +66,8 @@ TickType_t mainmenu_app_t::init(TickType_t tick, intent_t& intent, lv_obj_t* scr
     
 }
 TickType_t mainmenu_app_t::handle(TickType_t tick){
-    // todo 切换动画
-    // if (index_changed!=0){
-    //     log_w("Noticed change of index %d type %d",index,index_changed);
-    //     index_changed = 0;
-    //     // 清理前一个窗口
-    //     lv_obj_del(now_app_container);
-    //     std::vector<app_t*>& vecRef = *app_list_ptr; // vector is not copied here
-    //     app_t* a = vecRef[index];
-    //     a->init_app_info();
-    //     // 建立新的窗口
-    //     now_app_container = create_app_ctr(app_screen,a->get_app_info_ptr()); // todo how to track app's num, 切换时怎么跟踪下一个是谁
-    // }
-
-    if (index_changed!=0){
+    if ((!busy)&&(index_changed!=0)){
         log_w("Noticed change of index %d type %d",index,index_changed);
-        index_changed = 0;
         int16_t now_start_x;
         int16_t now_end_x;
         int16_t old_start_x;
@@ -97,6 +84,7 @@ TickType_t mainmenu_app_t::handle(TickType_t tick){
             old_start_x = 0;
             old_end_x = -184;
         }
+        index_changed = 0;
 
         // lv_anim_path_t path;
         // lv_anim_path_init(&path);
@@ -110,11 +98,11 @@ TickType_t mainmenu_app_t::handle(TickType_t tick){
         std::vector<app_t*>& vecRef = *app_list_ptr; // vector is not copied here
         app_t* a = vecRef[index];
         // 建立新的窗口
-        lv_obj_t* next_app_container = create_app_ctr(app_screen,a->get_app_info_ptr(),a); // todo how to track app's num, 切换时怎么跟踪下一个是谁
+        next_app_container = create_app_ctr(app_screen,a->get_app_info_ptr(),a); // todo how to track app's num, 切换时怎么跟踪下一个是谁
 
         lv_anim_t now_app;
         lv_anim_init(&now_app);
-        // now_app.path_cb=lv_anim_path_ease_out;
+        now_app.path_cb=lv_anim_path_ease_out;
         lv_anim_set_exec_cb(&now_app, (lv_anim_exec_xcb_t)lv_obj_set_x);
         lv_anim_set_var(&now_app, next_app_container);
         lv_anim_set_values(&now_app, now_start_x, now_end_x);
@@ -124,7 +112,7 @@ TickType_t mainmenu_app_t::handle(TickType_t tick){
 
         lv_anim_t pre_app;
         lv_anim_init(&pre_app);
-        // pre_app.path_cb=lv_anim_path_ease_out;
+        pre_app.path_cb=lv_anim_path_ease_out;
         lv_anim_set_exec_cb(&pre_app, (lv_anim_exec_xcb_t)lv_obj_set_x);
         lv_anim_set_var(&pre_app, now_app_container);
         lv_anim_set_values(&pre_app, old_start_x, old_end_x);
@@ -135,19 +123,25 @@ TickType_t mainmenu_app_t::handle(TickType_t tick){
         lv_anim_start(&now_app);
         lv_anim_start(&pre_app);
 
-        while (lv_anim_count_running()) \
-            lv_task_handler(); //等待动画完成TODO port to timer
-
+        
+        busy = true;
+        return 1;
 
 
         // 清理前一个窗口
-        lv_obj_del(now_app_container);
-        now_app_container = next_app_container;
+        
         // std::vector<app_t*>& vecRef = *app_list_ptr; // vector is not copied here
         // app_t* a = vecRef[index];
         // a->init_app_info();
         // // 建立新的窗口
         // now_app_container = create_app_ctr(app_screen,a->get_app_info_ptr()); // todo how to track app's num, 切换时怎么跟踪下一个是谁
+    }
+    if (busy){
+        if (!lv_anim_count_running()) {
+            busy=false;
+            lv_obj_del(now_app_container);
+            now_app_container = next_app_container;
+        }
     }
     return 1;
 }
@@ -180,7 +174,7 @@ void mainmenu_app_t::show_no_app(){
 lv_obj_t* mainmenu_app_t::create_app_ctr(lv_obj_t * parent, app_info_t* app_info, app_t* the_app){
     lv_obj_t* ret = lv_obj_create(parent);
     // lv_obj_t* ret = parent;
-    lv_obj_set_size(ret,128,128);
+    lv_obj_set_size(ret,180,200);
     lv_obj_align(ret, LV_ALIGN_CENTER, 0, 0);
 
     lv_obj_t* app_image = lv_img_create(ret);
