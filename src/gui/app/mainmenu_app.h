@@ -29,7 +29,7 @@ private:
     int index = 0;
     static mainmenu_app_t* mainmenu_app_ptr;
     static lv_obj_t* now_app_container;
-    bool index_changed = false;
+    int index_changed = false;
 public:
     void notify_indev(int dir);
     static lv_obj_t* create_app_ctr(lv_obj_t* parent, app_info_t* app_info);

@@ -65,9 +65,10 @@ TickType_t mainmenu_app_t::init(TickType_t tick, intent_t& intent, lv_obj_t* scr
     
 }
 TickType_t mainmenu_app_t::handle(TickType_t tick){
-    if (index_changed){
+    // todo 切换动画
+    if (index_changed!=0){
         log_w("Noticed change of index");
-        index_changed = false;
+        index_changed = 0;
         // 清理前一个窗口
         lv_obj_del(now_app_container);
         std::vector<app_t*>& vecRef = *app_list_ptr; // vector is not copied here
@@ -137,10 +138,12 @@ void mainmenu_app_t::notify_indev(int dir){
     if (dir == 0){
         return;//TODO:enter app here
     }
-    index_changed = true;
-    if (dir == 1)
+    if (dir == 1){
         index = ((index+1)>=app_list_ptr->size()) ? 0 : index+1;// 下一个app
-    if (dir == 2)
+        index_changed = 1;
+    }else if (dir == 2){
         index = (index == 0) ? app_list_ptr->size() -1 : index-1;// 上一个app
+        index_changed = -1;
+    }
     log_w("now index is %d",index);
 }
