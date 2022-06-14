@@ -45,9 +45,10 @@ static void my_disp_flush( lv_disp_drv_t *disp, const lv_area_t *area, lv_color_
 
     tft.startWrite();
     tft.setAddrWindow( area->x1, area->y1, w, h );
-    tft.pushColors( ( uint16_t * )&color_p->full, w * h, true );
+    // tft.pushColors( ( uint16_t * )&color_p->full, w * h, true );
+    // tft.pushPixelsDMA(( uint16_t * )&color_p->full,w*h);
+    tft.pushImageDMA(area->x1,area->y1,w,h,( uint16_t * )&color_p->full,nullptr);
     tft.endWrite();
-    // tft.pushPixelsDMA(,);
 
     lv_disp_flush_ready( disp );
 }
@@ -114,10 +115,14 @@ static void lvgl_task(TimerHandle_t xTimer)
 void guiSetUp(){
     
     // Begin set tft_espi
-    tft.begin();          /* TFT init */
+    // tft.begin();          /* TFT init */
     // tft.initDMA();
+    tft.init();
+    tft.initDMA();
     // tft.setRotation( 4 ); /* Landscape orientation, flipped */
     tft.setRotation( 2 ); /* Landscape orientation, not flipped for ez debug */
+    tft.fillScreen(TFT_RED);
+    vTaskDelay(1000);
     // Set tft_espi Done
 
 
