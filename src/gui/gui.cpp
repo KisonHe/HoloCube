@@ -118,7 +118,9 @@ void guiSetUp(){
     // tft.begin();          /* TFT init */
     // tft.initDMA();
     tft.init();
-    tft.initDMA();
+    if (!tft.initDMA()){
+        log_e("Fail to init dma");
+    }
     // tft.setRotation( 4 ); /* Landscape orientation, flipped */
     tft.setRotation( 2 ); /* Landscape orientation, not flipped for ez debug */
     tft.fillScreen(TFT_RED);
