@@ -4,9 +4,9 @@
 
 namespace indrv{
 void notify(ButtonEventInfo info){
-    // if (info.ClickType==ClickType_t::Pressed && info.ButtonId != ){
-    //     mainmenu_app.notify_indev(0);
-    // }
+    if (info.ClickType==ClickType_t::Pressed && info.ButtonId != 2){
+        mainmenu_app.notify_indev(info.ButtonId == 1 ? 1 : 2);
+    }
 }
 void btn_handler(ButtonEventInfo info){
     log_w("Got btn%d eventNum%d",info.ButtonId,info.ClickType);

@@ -66,6 +66,8 @@ TickType_t mainmenu_app_t::init(TickType_t tick, intent_t& intent, lv_obj_t* scr
 }
 TickType_t mainmenu_app_t::handle(TickType_t tick){
     if (index_changed){
+        log_w("Noticed change of index");
+        index_changed = false;
         // 清理前一个窗口
         lv_obj_del(now_app_container);
         std::vector<app_t*>& vecRef = *app_list_ptr; // vector is not copied here

@@ -93,6 +93,7 @@ static void lvgl_task(TimerHandle_t xTimer)
         if (xSemaphoreTake(lvgl_lock,0) == pdTRUE){ //give up timer handle if didn't get the lock
             app_manager::manager_handle();
             lv_timer_handler(); /* let the GUI do its work */
+            xSemaphoreGive(lvgl_lock);
         }
         vTaskDelay(pdMS_TO_TICKS(5));
     }
