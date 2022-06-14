@@ -41,7 +41,8 @@ void helloworld_app::deinit(TickType_t tick){
     
 }
 
-void helloworld_app::init_app_info(){
+void helloworld_app::init_app_info(lv_obj_t* img){
     // todo set name according to lang also
     // lv_img_set_src(helloworld_app_logo, &google);
+    lv_img_set_src(img, "S:/spiffs/google.bin");
 }

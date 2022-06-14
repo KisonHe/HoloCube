@@ -3,7 +3,7 @@
 #include "SPIFFS.h"
 #include "btn_cb.h"
 #include "gui/app/app.h"
-button mybutton1({14},1,{buttonDefaultConfig});
+// button mybutton1({14},1,{buttonDefaultConfig});
 button mybutton2({21},2,{buttonDefaultConfig});
 button mybutton3({27},3,{buttonDefaultConfig});
 void setup()
@@ -11,23 +11,24 @@ void setup()
     // Serial.begin(115200);
     // log_w("in setup app_list %x is %d long",app_t::app_list_ptr,app_t::app_list_ptr->size());
     // helloworld_app* main_helloworld_app = new helloworld_app(&hello_world_app_info);
+    log_d("CPU Freq: %d",getCpuFrequencyMhz());
     ButtonEventHandler = indrv::btn_handler;
     button::setUp(buttonDefaultSetup);
     
     pinMode(22, OUTPUT);
-    // if (!SPIFFS.begin()){
-    //     log_e("SPIFFS Mount Failed");
-    // }
-    // else{
-    //     log_w("SPIFFS Mounted");
-    //     // File root = SPIFFS.open("/");
-    //     // File file = root.openNextFile(); 
-    //     // while(file){
-    //     //     Serial.print("FILE: ");
-    //     //     Serial.println(file.name());
-    //     //     file = root.openNextFile();
-    //     // }
-    // }
+    if (!SPIFFS.begin()){
+        log_e("SPIFFS Mount Failed");
+    }
+    else{
+        log_w("SPIFFS Mounted");
+        // File root = SPIFFS.open("/");
+        // File file = root.openNextFile(); 
+        // while(file){
+        //     Serial.print("FILE: ");
+        //     Serial.println(file.name());
+        //     file = root.openNextFile();
+        // }
+    }
     guiSetUp();digitalWrite(22,HIGH);
 }
 

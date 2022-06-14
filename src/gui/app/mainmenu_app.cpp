@@ -57,8 +57,8 @@ TickType_t mainmenu_app_t::init(TickType_t tick, intent_t& intent, lv_obj_t* scr
         std::vector<app_t*>& vecRef = *app_list_ptr; // vector is not copied here
         app_t* a = vecRef[index];
         log_w("showing app %x with name %s",a,a->get_app_info_ptr()->name);
-        a->init_app_info();
-        now_app_container = create_app_ctr(app_screen,a->get_app_info_ptr()); // todo how to track app's num, 切换时怎么跟踪下一个是谁
+        now_app_container = create_app_ctr(app_screen,a->get_app_info_ptr(),a); // todo how to track app's num, 切换时怎么跟踪下一个是谁
+        log_e("Pos x is %d, y %d",lv_obj_get_x(now_app_container),lv_obj_get_y(now_app_container));
     }
 
     return 1;
@@ -66,16 +66,88 @@ TickType_t mainmenu_app_t::init(TickType_t tick, intent_t& intent, lv_obj_t* scr
 }
 TickType_t mainmenu_app_t::handle(TickType_t tick){
     // todo 切换动画
+    // if (index_changed!=0){
+    //     log_w("Noticed change of index %d type %d",index,index_changed);
+    //     index_changed = 0;
+    //     // 清理前一个窗口
+    //     lv_obj_del(now_app_container);
+    //     std::vector<app_t*>& vecRef = *app_list_ptr; // vector is not copied here
+    //     app_t* a = vecRef[index];
+    //     a->init_app_info();
+    //     // 建立新的窗口
+    //     now_app_container = create_app_ctr(app_screen,a->get_app_info_ptr()); // todo how to track app's num, 切换时怎么跟踪下一个是谁
+    // }
+
     if (index_changed!=0){
-        log_w("Noticed change of index");
+        log_w("Noticed change of index %d type %d",index,index_changed);
         index_changed = 0;
-        // 清理前一个窗口
-        lv_obj_del(now_app_container);
+        int16_t now_start_x;
+        int16_t now_end_x;
+        int16_t old_start_x;
+        int16_t old_end_x;
+        int16_t unit = 300;
+        if (index_changed>0){
+            now_start_x = -184;
+            now_end_x = 0;
+            old_start_x = 0;
+            old_end_x = 184;
+        }else{
+            now_start_x = 184;
+            now_end_x = 0;
+            old_start_x = 0;
+            old_end_x = -184;
+        }
+
+        // lv_anim_path_t path;
+        // lv_anim_path_init(&path);
+        // /*
+        // lv_anim_path_linear lv_anim_path_bounce
+        // lv_anim_path_overshoot lv_anim_path_ease_out
+        // lv_anim_path_step
+        // */
+        // lv_anim_path_set_cb(&path, lv_anim_path_ease_out);
+
         std::vector<app_t*>& vecRef = *app_list_ptr; // vector is not copied here
         app_t* a = vecRef[index];
-        a->init_app_info();
         // 建立新的窗口
-        now_app_container = create_app_ctr(app_screen,a->get_app_info_ptr()); // todo how to track app's num, 切换时怎么跟踪下一个是谁
+        lv_obj_t* next_app_container = create_app_ctr(app_screen,a->get_app_info_ptr(),a); // todo how to track app's num, 切换时怎么跟踪下一个是谁
+
+        lv_anim_t now_app;
+        lv_anim_init(&now_app);
+        // now_app.path_cb=lv_anim_path_ease_out;
+        lv_anim_set_exec_cb(&now_app, (lv_anim_exec_xcb_t)lv_obj_set_x);
+        lv_anim_set_var(&now_app, next_app_container);
+        lv_anim_set_values(&now_app, now_start_x, now_end_x);
+        uint32_t duration = lv_anim_speed_to_time(unit, now_start_x, now_end_x); // 计算时间
+        lv_anim_set_time(&now_app, duration);
+        // lv_anim_set_path(&now_app, lv_anim_path_ease_out); // Default is linear
+
+        lv_anim_t pre_app;
+        lv_anim_init(&pre_app);
+        // pre_app.path_cb=lv_anim_path_ease_out;
+        lv_anim_set_exec_cb(&pre_app, (lv_anim_exec_xcb_t)lv_obj_set_x);
+        lv_anim_set_var(&pre_app, now_app_container);
+        lv_anim_set_values(&pre_app, old_start_x, old_end_x);
+        duration = lv_anim_speed_to_time(unit, old_start_x, old_end_x); // 计算时间
+        lv_anim_set_time(&pre_app, duration);
+        // lv_anim_set_path(&pre_app, lv_anim_path_ease_out); // Default is linear
+
+        lv_anim_start(&now_app);
+        lv_anim_start(&pre_app);
+
+        while (lv_anim_count_running()) \
+            lv_task_handler(); //等待动画完成TODO port to timer
+
+
+
+        // 清理前一个窗口
+        lv_obj_del(now_app_container);
+        now_app_container = next_app_container;
+        // std::vector<app_t*>& vecRef = *app_list_ptr; // vector is not copied here
+        // app_t* a = vecRef[index];
+        // a->init_app_info();
+        // // 建立新的窗口
+        // now_app_container = create_app_ctr(app_screen,a->get_app_info_ptr()); // todo how to track app's num, 切换时怎么跟踪下一个是谁
     }
     return 1;
 }
@@ -105,13 +177,15 @@ void mainmenu_app_t::show_no_app(){
  * @param app_info 
  * @return lv_obj_t* 
  */
-lv_obj_t* mainmenu_app_t::create_app_ctr(lv_obj_t * parent, app_info_t* app_info){
+lv_obj_t* mainmenu_app_t::create_app_ctr(lv_obj_t * parent, app_info_t* app_info, app_t* the_app){
     lv_obj_t* ret = lv_obj_create(parent);
     // lv_obj_t* ret = parent;
-    lv_obj_set_size(ret,240,240);
+    lv_obj_set_size(ret,128,128);
     lv_obj_align(ret, LV_ALIGN_CENTER, 0, 0);
 
     lv_obj_t* app_image = lv_img_create(ret);
+    the_app->init_app_info(app_image);
+    
     lv_img_set_src(app_image, &app_info->logo);
     lv_obj_align(app_image, LV_ALIGN_CENTER, 0, 0);
     lv_obj_t* app_name = lv_label_create(ret);
@@ -125,7 +199,7 @@ lv_obj_t* mainmenu_app_t::create_app_ctr(lv_obj_t * parent, app_info_t* app_info
  * @brief 用不到
  * 
  */
-void mainmenu_app_t::init_app_info(){}
+void mainmenu_app_t::init_app_info(lv_obj_t* img){}
 
 /**
  * @brief 

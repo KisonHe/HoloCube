@@ -95,7 +95,7 @@ static void lvgl_task(TimerHandle_t xTimer)
             lv_timer_handler(); /* let the GUI do its work */
             xSemaphoreGive(lvgl_lock);
         }
-        vTaskDelay(pdMS_TO_TICKS(5));
+        vTaskDelay(pdMS_TO_TICKS(1));
     }
     
 }
@@ -114,7 +114,8 @@ void guiSetUp(){
     
     // Begin set tft_espi
     tft.begin();          /* TFT init */
-    tft.setRotation( 4 ); /* Landscape orientation, flipped */
+    // tft.setRotation( 4 ); /* Landscape orientation, flipped */
+    tft.setRotation( 2 ); /* Landscape orientation, not flipped for ez debug */
     // Set tft_espi Done
 
 

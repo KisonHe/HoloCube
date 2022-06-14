@@ -221,14 +221,14 @@ e.g. "stm32f769xx.h" or "stm32f429xx.h"*/
  *-----------*/
 
 /*1: Show CPU usage and FPS count in the right bottom corner*/
-#define LV_USE_PERF_MONITOR 0
+#define LV_USE_PERF_MONITOR 1
 #if LV_USE_PERF_MONITOR
 #define LV_USE_PERF_MONITOR_POS LV_ALIGN_BOTTOM_RIGHT
 #endif
 
 /*1: Show the used memory and the memory fragmentation in the left bottom corner
  * Requires LV_MEM_CUSTOM = 0*/
-#define LV_USE_MEM_MONITOR 0
+#define LV_USE_MEM_MONITOR 1
 #if LV_USE_PERF_MONITOR
 #define LV_USE_MEM_MONITOR_POS LV_ALIGN_BOTTOM_LEFT
 #endif
@@ -352,7 +352,7 @@ e.g. "stm32f769xx.h" or "stm32f429xx.h"*/
 #define LV_USE_FONT_COMPRESSED 1
 
 /*Enable subpixel rendering*/
-#define LV_USE_FONT_SUBPX 1
+#define LV_USE_FONT_SUBPX 0
 #if LV_USE_FONT_SUBPX
 /*Set the pixel order of the display. Physical order of RGB channels. Doesn't matter with "normal" fonts.*/
 #define LV_FONT_SUBPX_BGR 0  /*0: RGB; 1:BGR order*/
@@ -514,7 +514,7 @@ e.g. "stm32f769xx.h" or "stm32f429xx.h"*/
 #if LV_USE_THEME_DEFAULT
 
 /*0: Light mode; 1: Dark mode*/
-# define LV_THEME_DEFAULT_DARK 0
+# define LV_THEME_DEFAULT_DARK 1
 
 /*1: Enable grow on press*/
 # define LV_THEME_DEFAULT_GROW 1

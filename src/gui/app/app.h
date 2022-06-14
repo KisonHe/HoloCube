@@ -61,7 +61,7 @@ public:
      * @brief 用于初始化app的图片与名字
      * 
      */
-    virtual void init_app_info() = 0;
+    virtual void init_app_info(lv_obj_t* img) = 0;
     app_info_t* get_app_info_ptr();
     app_t(bool if_push_2_list, app_config_t* app_config_ptr, app_info_t* app_info_ptr);
     ~app_t();
