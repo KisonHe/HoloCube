@@ -47,6 +47,7 @@ static void my_disp_flush( lv_disp_drv_t *disp, const lv_area_t *area, lv_color_
     tft.setAddrWindow( area->x1, area->y1, w, h );
     tft.pushColors( ( uint16_t * )&color_p->full, w * h, true );
     tft.endWrite();
+    // tft.pushPixelsDMA(,);
 
     lv_disp_flush_ready( disp );
 }
@@ -114,6 +115,7 @@ void guiSetUp(){
     
     // Begin set tft_espi
     tft.begin();          /* TFT init */
+    // tft.initDMA();
     // tft.setRotation( 4 ); /* Landscape orientation, flipped */
     tft.setRotation( 2 ); /* Landscape orientation, not flipped for ez debug */
     // Set tft_espi Done
