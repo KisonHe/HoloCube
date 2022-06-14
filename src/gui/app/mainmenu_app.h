@@ -42,3 +42,5 @@ public:
     mainmenu_app_t(/* args */);
     ~mainmenu_app_t();
 };
+
+extern mainmenu_app_t mainmenu_app;
