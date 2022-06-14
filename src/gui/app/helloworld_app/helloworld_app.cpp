@@ -31,9 +31,22 @@ helloworld_app::~helloworld_app()
 
 TickType_t helloworld_app::init(TickType_t tick, intent_t& intent, lv_obj_t* screen){
     app_screen = screen;
+    log_w("init of helloworld app!");
+    text_lable = lv_label_create(app_screen);
+    assert(text_lable!=nullptr);
+    // lv_obj_add_style(ret, &default_style, 0); // todo selector
+    lv_label_set_text(text_lable, "Hello World!"); // todo set font also,maybe need to change the struct
+    lv_obj_align(text_lable, LV_ALIGN_CENTER, 0, 0);
     return 1;
 }
 TickType_t helloworld_app::handle(TickType_t tick){
+    cnt++;
+    if (cnt>1000){
+        lv_label_set_text(text_lable, "Hello World!");
+        cnt=0;
+    }else if(cnt>500){
+        lv_label_set_text(text_lable, "Hello World!~");
+    }
     return 1;
 
 }

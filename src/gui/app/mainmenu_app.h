@@ -32,6 +32,7 @@ private:
     static lv_obj_t* next_app_container;
     int index_changed = false;
     bool busy = false;
+    bool enterApp = false;
 public:
     void notify_indev(int dir);
     static lv_obj_t* create_app_ctr(lv_obj_t * parent, app_info_t* app_info, app_t* the_app);
