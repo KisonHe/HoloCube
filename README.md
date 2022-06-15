@@ -3,6 +3,8 @@
 npm i lv_font_conv 
 npm i lv_img_conv
 ```
+[Download](https://github.com/googlefonts/noto-cjk/raw/main/Sans/Mono/NotoSansMonoCJKsc-Regular.otf)
+
 ## OTA
 参考 
 1. https://docs.platformio.org/en/latest/platforms/espressif32.html#over-the-air-ota-update

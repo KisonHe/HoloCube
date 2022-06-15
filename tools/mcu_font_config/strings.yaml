@@ -13,6 +13,11 @@ Fonts:
     Size: 25
     Symbol: 0123456789:!., 
     bpp: 4 
+  - Name: ui-36
+    TTF: /home/kisonhe/Downloads/NotoSansMonoCJKsc-Regular.otf
+    Size: 36
+    Symbol: 0123456789:!., #TODO this is not working
+    bpp: 4 
   # - Name: icon # You can set icon as well!
   #   TTF: /home/kisonhe/Downloads/MaterialIcons-Regular.ttf
   #   Size: 30
@@ -23,6 +28,10 @@ Fonts:
   #   bpp: 4 
 
 Strings: 
+  - ID: Dummy
+    Content-all:
+      Font: ui-36
+      Value: "0123456789:"
   - ID: Language # Alias name for how you get the text
     Content-English: # Translate for English, must match Languages defined 
       Font: ui   # Maybe Chinese is shorter, so you can set different font for different lang. But remember to update the font!
