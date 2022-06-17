@@ -11,7 +11,7 @@ void notify(ButtonEventInfo info){
     }
 }
 void btn_handler(ButtonEventInfo info){
-    log_w("Got btn%d eventNum%d",info.ButtonId,info.ClickType);
+    log_d("Got btn%d eventNum%d",info.ButtonId,info.ClickType);
     notify(info);
 }
 

@@ -9,8 +9,7 @@ button mybutton3({27},3,{buttonDefaultConfig});
 void setup()
 {
     // Serial.begin(115200);
-    // log_w("in setup app_list %x is %d long",app_t::app_list_ptr,app_t::app_list_ptr->size());
-    // helloworld_app* main_helloworld_app = new helloworld_app(&hello_world_app_info);
+    // log_i("in setup app_list %x is %d long",app_t::app_list_ptr,app_t::app_list_ptr->size());
     log_d("CPU Freq: %d",getCpuFrequencyMhz());
     ButtonEventHandler = indrv::btn_handler;
     button::setUp(buttonDefaultSetup);
@@ -20,7 +19,7 @@ void setup()
         log_e("SPIFFS Mount Failed");
     }
     else{
-        log_w("SPIFFS Mounted");
+        log_i("SPIFFS Mounted");
         // File root = SPIFFS.open("/");
         // File file = root.openNextFile(); 
         // while(file){

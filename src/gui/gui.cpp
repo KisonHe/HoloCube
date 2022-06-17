@@ -55,12 +55,6 @@ static void lvgl_task(TimerHandle_t xTimer)
 {
     xSemaphoreTake(lvgl_lock,portMAX_DELAY);
 
-    // static lv_style_t default_style;
-    // ESP_LOGD(TAG,"Initing lvgl's fs");
-    // lv_fs_init();
-    // lv_style_init(&default_style);
-    // lv_style_set_bg_color(&default_style, lv_color_black());
-    // lv_style_set_text_color(&default_style,lv_color_white());
     load_common_style();
     strings::kh_load_all_font();
     strings::kh_fonttool_set_lang(strings::English);
@@ -73,20 +67,6 @@ static void lvgl_task(TimerHandle_t xTimer)
     app_manager::manager_init();
     ESP_LOGD(TAG,"Done");
 
-    // lv_obj_t * label = lv_label_create(lv_scr_act());
-    // lv_obj_add_style(label,&default_style,LV_STATE_DEFAULT);
-    // lv_obj_add_style(lv_scr_act(),&default_style,LV_STATE_DEFAULT);
-    
-    // strings::kh_fonttool_set_lang(strings::Chinese);
-    // lv_label_set_text(label,strings::kh_fonttool_get_text(strings::Language));
-    // log_w("%s",strings::kh_fonttool_get_text(strings::Language));
-    // lv_obj_center(label);
-    // const lv_font_t* tmp = nullptr;
-    // tmp = strings::kh_fonttool_get_font(strings::Language);
-    // if (tmp == nullptr){
-    // }else{
-    //     lv_obj_set_style_text_font(label,tmp,0);
-    // }
     xSemaphoreGive(lvgl_lock);
     while (1)
     {
@@ -148,7 +128,4 @@ void guiSetUp(){
                             &lvgl_Task_Handle,
                             1);
 
-    // main_helloworld_app.handle(0); // avoid o3
-
 }
-

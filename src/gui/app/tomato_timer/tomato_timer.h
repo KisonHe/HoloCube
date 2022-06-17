@@ -9,6 +9,12 @@ struct tomato_timer_config
     int32_t longBreakTime = 600;//seconds
 };
 
+enum tomato_timer_state_t{
+    timer_state_reset,  // Reset, the state right into app & after pressing reset btn
+    timer_state_ring,   // Ring, the state when & after the timer expires
+    timer_state_paused, // The state when timer gets paused
+    timer_state_running // The state when timer is counting
+};
 
 class tomato_timer : public app_t
 {
@@ -22,8 +28,12 @@ private:
     lv_obj_t* min_label = nullptr;
     lv_obj_t* mid_label = nullptr;
     lv_obj_t* sec_label = nullptr;
+    void state_init(tomato_timer_state_t s);
+    void state_deinit(tomato_timer_state_t s);
+    void state_handle(tomato_timer_state_t s);
     char min_str[3] = "00";
     char sec_str[3] = "00";
+    tomato_timer_state_t state = timer_state_reset;
 public:
     TickType_t init(TickType_t tick, intent_t& intent, lv_obj_t* screen);
     TickType_t handle(TickType_t tick);

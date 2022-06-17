@@ -46,9 +46,9 @@ TickType_t mainmenu_app_t::init(TickType_t tick, intent_t& intent, lv_obj_t* scr
         index = 0;
         std::vector<app_t*>& vecRef = *app_list_ptr; // vector is not copied here
         app_t* a = vecRef[index];
-        log_w("showing app %x with name %s",a,a->get_app_info_ptr()->name);
+        log_d("showing app %x with name %s",a,a->get_app_info_ptr()->name);
         now_app_container = create_app_ctr(app_screen,a->get_app_info_ptr(),a); 
-        log_e("Pos x is %d, y %d",lv_obj_get_x(now_app_container),lv_obj_get_y(now_app_container));
+        // log_v("Pos x is %d, y %d",lv_obj_get_x(now_app_container),lv_obj_get_y(now_app_container));
     }
 
     return 1;
@@ -68,7 +68,7 @@ TickType_t mainmenu_app_t::handle(TickType_t tick){
         });
     }
     if ((!busy)&&(index_changed!=0)){
-        log_w("Noticed change of index %d type %d",index,index_changed);
+        log_d("Noticed change of index %d type %d",index,index_changed);
         int16_t now_start_x;
         int16_t now_end_x;
         int16_t old_start_x;
@@ -189,7 +189,7 @@ void mainmenu_app_t::notify_indev(int dir){
     }
     // 如果有左右事件
     // 切换对应app
-    log_w("notify_indev got dir %d",dir);
+    log_d("notify_indev got dir %d",dir);
     if (dir == 0 && (!busy)){
         enterApp = true;
         return;//TODO:enter app here
@@ -201,5 +201,5 @@ void mainmenu_app_t::notify_indev(int dir){
         index = (index == 0) ? app_list_ptr->size() -1 : index-1;// 上一个app
         index_changed = -1;
     }
-    log_w("now index is %d",index);
+    log_d("now index is %d",index);
 }
