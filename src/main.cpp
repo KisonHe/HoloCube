@@ -3,9 +3,9 @@
 #include "SPIFFS.h"
 #include "btn_cb.h"
 #include "gui/app/app.h"
-button mybutton1({14},1,{buttonDefaultConfig});
-button mybutton2({21},2,{buttonDefaultConfig});
-button mybutton3({27},3,{buttonDefaultConfig});
+// button mybutton1({14},1,{buttonDefaultConfig});
+// button mybutton2({21},2,{buttonDefaultConfig});
+// button mybutton3({27},3,{buttonDefaultConfig});
 void setup()
 {
     // Serial.begin(115200);

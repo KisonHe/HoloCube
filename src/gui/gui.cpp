@@ -125,6 +125,10 @@ void guiSetUp(){
     tft.setRotation( 2 ); /* Landscape orientation, not flipped for ez debug */
     tft.fillScreen(TFT_RED);
     vTaskDelay(1000);
+    tft.fillScreen(TFT_GREEN);
+    vTaskDelay(1000);
+    tft.fillScreen(TFT_BLUE);
+    vTaskDelay(1000);
     // Set tft_espi Done
 
 
