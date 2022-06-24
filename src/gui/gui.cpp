@@ -94,9 +94,9 @@ void guiSetUp(){
     
     // Begin set tft_espi
     tft.begin();          /* TFT init */
-    // tft.setRotation( 4 ); /* Landscape orientation, flipped */
+    tft.setRotation( 5 ); /* Landscape orientation, flipped */
     // 我超这个镜子对光偏振有要求不同方向的强度不一样，我吐了，还好还没开始画结构
-    tft.setRotation( 3 ); /* Landscape orientation, not flipped for ez debug */
+    // tft.setRotation( 3 ); /* Landscape orientation, not flipped for ez debug */
     // Set tft_espi Done
 
 
