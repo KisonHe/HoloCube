@@ -18,7 +18,8 @@
 static const uint16_t screenWidth  = TFT_WIDTH;
 static const uint16_t screenHeight = TFT_HEIGHT;
 static lv_disp_draw_buf_t draw_buf;
-static lv_color_t buf[ screenWidth * 10 ];
+static lv_color_t buf[ screenWidth * 40 ];
+// static lv_color_t buf1[ screenWidth * 20 ];
 TaskHandle_t lvgl_Task_Handle;
 SemaphoreHandle_t lvgl_lock;
 
@@ -50,6 +51,20 @@ static void my_disp_flush( lv_disp_drv_t *disp, const lv_area_t *area, lv_color_
     tft.pushImageDMA(area->x1,area->y1,w,h,( uint16_t * )&color_p->full,nullptr);
     tft.endWrite();
 
+
+    // uint32_t w = ( area->x2 - area->x1 + 1 );
+    // uint32_t h = ( area->y2 - area->y1 + 1 );
+    // uint32_t enterTime, exitTime;
+    // enterTime = micros();
+    
+    // tft.startWrite();
+    // tft.setAddrWindow( area->x1, area->y1, w, h );
+    // // tft.pushColors( ( uint16_t * )&color_p->full, w * h, true );
+    // // tft.pushPixelsDMA(( uint16_t * )&color_p->full,w*h);
+    // tft.pushImageDMA(area->x1,area->y1,w,h,( uint16_t * )&color_p->full,nullptr);
+    // tft.endWrite();
+    // exitTime = micros();
+    // log_w("aera size:%04d,timeSpent%d",w*h,exitTime-enterTime);
     lv_disp_flush_ready( disp );
 }
 
@@ -105,10 +120,10 @@ void guiSetUp(){
     tft.setRotation( 2 ); /* Landscape orientation, not flipped for ez debug */
     tft.fillScreen(TFT_RED);
     vTaskDelay(1000);
-    tft.fillScreen(TFT_GREEN);
-    vTaskDelay(1000);
-    tft.fillScreen(TFT_BLUE);
-    vTaskDelay(1000);
+    // tft.fillScreen(TFT_GREEN);
+    // vTaskDelay(1000);
+    // tft.fillScreen(TFT_BLUE);
+    // vTaskDelay(1000);
     // Set tft_espi Done
 
 
@@ -120,7 +135,7 @@ void guiSetUp(){
     lv_log_register_print_cb( my_print ); /* register print function for debugging */
 #endif
 #endif
-    lv_disp_draw_buf_init( &draw_buf, buf, NULL, screenWidth * 10 );
+    lv_disp_draw_buf_init( &draw_buf, buf, nullptr, screenWidth * 40 );
     /*Initialize the display*/
     static lv_disp_drv_t disp_drv;
     lv_disp_drv_init( &disp_drv );

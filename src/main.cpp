@@ -3,6 +3,7 @@
 #include "SPIFFS.h"
 #include "btn_cb.h"
 #include "gui/app/app.h"
+#include "gui/app/mainmenu_app.h"
 // button mybutton1({14},1,{buttonDefaultConfig});
 // button mybutton2({21},2,{buttonDefaultConfig});
 // button mybutton3({27},3,{buttonDefaultConfig});
@@ -37,8 +38,9 @@ void loop()
     // vTaskDelay(1000);
     // Serial.println(GIT_REV);
     // log_w("Set to High");
-    digitalWrite(22,HIGH);
-    vTaskDelay(5);
+    // digitalWrite(22,HIGH);
+    vTaskDelay(1500);
+    // mainmenu_app.notify_indev(1);
     // log_w("Set to Low");
     // digitalWrite(22,LOW);
     // vTaskDelay(5);

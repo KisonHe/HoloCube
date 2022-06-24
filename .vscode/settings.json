@@ -45,6 +45,7 @@
         "chrono": "cpp",
         "list": "cpp",
         "ratio": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "lv_label.h": "c"
     }
 }
