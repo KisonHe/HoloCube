@@ -15,3 +15,6 @@ npm i lv_img_conv
 有空了仔细看一下，看是否能用github actions自动化掉
 
 我草，pio真牛逼，test也还没有看
+
+## Wifi 
+https://iotespresso.com/create-captive-portal-using-esp32/

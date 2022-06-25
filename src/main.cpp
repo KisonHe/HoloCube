@@ -37,7 +37,7 @@ void loop()
     // vTaskDelay(1000);
     // Serial.println(GIT_REV);
     // log_w("Set to High");
-    digitalWrite(22,HIGH);
+    // digitalWrite(22,HIGH);
     vTaskDelay(5);
     // log_w("Set to Low");
     // digitalWrite(22,LOW);

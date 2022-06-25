@@ -90,41 +90,45 @@ TickType_t mainmenu_app_t::handle(TickType_t tick){
         // lv_anim_path_linear lv_anim_path_bounce
         // lv_anim_path_overshoot lv_anim_path_ease_out
         // lv_anim_path_step
-        std::vector<app_t*>& vecRef = *app_list_ptr; // vector is not copied here
-        app_t* a = vecRef[index];
-        // 建立新的窗口
-        next_app_container = create_app_ctr(app_screen,a->get_app_info_ptr(),a);
+        if (app_t::app_list_ptr->size() >1){
+            std::vector<app_t*>& vecRef = *app_list_ptr; // vector is not copied here
+            app_t* a = vecRef[index];
+            // 建立新的窗口
+            next_app_container = create_app_ctr(app_screen,a->get_app_info_ptr(),a);
 
-        lv_anim_t now_app;
-        lv_anim_init(&now_app);
-        now_app.path_cb=lv_anim_path_ease_out;
-        lv_anim_set_exec_cb(&now_app, (lv_anim_exec_xcb_t)lv_obj_set_x);
-        lv_anim_set_var(&now_app, next_app_container);
-        lv_anim_set_values(&now_app, now_start_x, now_end_x);
-        uint32_t duration = lv_anim_speed_to_time(unit, now_start_x, now_end_x); // 计算时间
-        lv_anim_set_time(&now_app, duration);
+            lv_anim_t now_app;
+            lv_anim_init(&now_app);
+            now_app.path_cb=lv_anim_path_ease_out;
+            lv_anim_set_exec_cb(&now_app, (lv_anim_exec_xcb_t)lv_obj_set_x);
+            lv_anim_set_var(&now_app, next_app_container);
+            lv_anim_set_values(&now_app, now_start_x, now_end_x);
+            uint32_t duration = lv_anim_speed_to_time(unit, now_start_x, now_end_x); // 计算时间
+            lv_anim_set_time(&now_app, duration);
 
-        lv_anim_t pre_app;
-        lv_anim_init(&pre_app);
-        pre_app.path_cb=lv_anim_path_ease_out;
-        lv_anim_set_exec_cb(&pre_app, (lv_anim_exec_xcb_t)lv_obj_set_x);
-        lv_anim_set_var(&pre_app, now_app_container);
-        lv_anim_set_values(&pre_app, old_start_x, old_end_x);
-        duration = lv_anim_speed_to_time(unit, old_start_x, old_end_x); // 计算时间
-        lv_anim_set_time(&pre_app, duration);
+            lv_anim_t pre_app;
+            lv_anim_init(&pre_app);
+            pre_app.path_cb=lv_anim_path_ease_out;
+            lv_anim_set_exec_cb(&pre_app, (lv_anim_exec_xcb_t)lv_obj_set_x);
+            lv_anim_set_var(&pre_app, now_app_container);
+            lv_anim_set_values(&pre_app, old_start_x, old_end_x);
+            duration = lv_anim_speed_to_time(unit, old_start_x, old_end_x); // 计算时间
+            lv_anim_set_time(&pre_app, duration);
 
-        lv_anim_start(&now_app);
-        lv_anim_start(&pre_app);
+            lv_anim_start(&now_app);
+            lv_anim_start(&pre_app);
 
-        busy = true;
-        return 1;
-    }
-    if (busy){
-        if (!lv_anim_count_running()) {
-            busy=false;
-            lv_obj_del(now_app_container);
-            now_app_container = next_app_container;
+            busy = true;
+            return 1;
         }
+        if (busy){
+            if (!lv_anim_count_running()) {
+                busy=false;
+                lv_obj_del(now_app_container);
+                now_app_container = next_app_container;
+            }
+        }
+    }else{
+        // Only one app. Maybe add some anime
     }
     return 1;
 }
