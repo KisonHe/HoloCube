@@ -14,7 +14,8 @@
 #include "app.h"
 #include "mainmenu_app.h"
 #include "lvgl.h"
-#include "FreeRTOS.h"
+#include <freertos/FreeRTOS.h>
+#include "freertos/timers.h"
 #include "esp32-hal-log.h"
 // #include "hardware/indicator.h"
 static const char* TAG = "manager";

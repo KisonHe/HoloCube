@@ -2,7 +2,6 @@
 
 #include <Arduino.h>
 #include <esp_log.h>
-#include <FreeRTOS.h>
 #include <freertos/timers.h>
 
 #include <TFT_eSPI.h>
