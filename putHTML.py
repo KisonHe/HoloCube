@@ -1,6 +1,6 @@
 import subprocess
 import os
-
+# todo put to spiffs or .h file
 header_name = "wifihtml.h"
 header_dir = "src"
 html_filename = "WiFiPortal.html"

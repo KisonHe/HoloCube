@@ -89,20 +89,20 @@
   <body>
     <div class="main-block">
       <h1>连接HoloCube到WiFi</h1>
-      <form action="/">
+      <form action="/get">
         <input type="text" id="name" placeholder="WiFi Name" required/>
         <hr><label>加密方式</label><br>
-            <select id="EncryptList" onchange="onEncryptListChange(this)">
+            <select name="type" id="EncryptList" onchange="onEncryptListChange(this)">
             <!-- 其实用户要是要连没密码WiFi应该知道点一下WPA那个选项？ -->
             <!-- <option value="" disabled selected>请选择加密方式</option> -->
             <option value="WPA2-PSK">WPA2-PSK</option>
             <option value="None">None</option>
             </select>
-        <input type="password" id="password" placeholder="Password" required/>
+        <input name="password" type="password" id="password" placeholder="Password" minlength="8" required/>
         <hr>
         <div class="btn-block">
-          <p>您仍然可以在HoloCube的 Settngs App中更改WiFi设置</p>
-          <button type="submit" href="/">连接到WiFi</button>
+          <p>您仍然可以在HoloCube的 Settings App中更改WiFi设置</p>
+          <button type="submit">连接到WiFi</button>
         </div>
       </form>
     </div>

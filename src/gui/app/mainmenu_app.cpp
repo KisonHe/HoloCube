@@ -195,7 +195,7 @@ void mainmenu_app_t::notify_indev(int dir){
     // 切换对应app
     log_d("notify_indev got dir %d",dir);
     if (dir == 0 && (!busy)){
-        enterApp = true;
+        enterApp = true;    //todo if app need wifi connected stop the entering of app
         return;//TODO:enter app here
     }
     if (dir == 1){
