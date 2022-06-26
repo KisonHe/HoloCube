@@ -1,12 +1,21 @@
 <!DOCTYPE html>
+<meta charset="utf-8"> 
 <html>
   <head>
-    <title>Simple registration form</title>
+    <title>连接到WiFi</title>
 
     <style>
       :root{
         font-size: 16px;
       }
+      /* @media (max-width: 900px) {
+        body{
+          background-color: lightblue;
+        } */
+        .main-block{
+          transform: scale(2);
+        }
+      /* } */
       html, body {
       display: flex;
       justify-content: center;
@@ -34,8 +43,6 @@
       opacity: 0.3;
       }
       .main-block {
-      /* max-width: 21.25rem;  */
-      /* min-height: 28.75rem;  */
       padding: 0.625rem 0;
       margin: auto;
       border-radius: 5px; 
@@ -43,33 +50,12 @@
       box-shadow: 1px 2px 5px rgba(0,0,0,.31); 
       background: #ebebeb; 
       }
-      @media screen and (max-width: 768px) {
-        .main-block{
-          zoom: 2.5;
-        }
-      }
       form {
       margin: 0 1.875rem;
       }
-      input[type=radio]:checked + label:after {
-      opacity: 1;
-      }
-      input{
-      width: calc(100% - 57px);
+      input,select{
+      width: 90%;
       height: 2.25rem;
-      margin: 13px 0 0 -5px;
-      padding-left: 0.625rem; 
-      border-radius: 0 5px 5px 0;
-      border: solid 1px #cbc9c9; 
-      box-shadow: 1px 2px 5px rgba(0,0,0,.09); 
-      background: #fff; 
-      }
-      input[type=password] {
-      margin-bottom: 15px;
-      }
-      select{
-      width: calc(100% - 57px);
-      height: 36px;
       margin: 13px 0 0 -5px;
       padding-left: 0.625rem; 
       border-radius: 0 5px 5px 0;
@@ -104,7 +90,7 @@
     <div class="main-block">
       <h1>连接HoloCube到WiFi</h1>
       <form action="/">
-        <input type="text"id="name" placeholder="WiFi Name" required/>
+        <input type="text" id="name" placeholder="WiFi Name" required/>
         <hr><label>加密方式</label><br>
             <select id="EncryptList" onchange="onEncryptListChange(this)">
             <!-- 其实用户要是要连没密码WiFi应该知道点一下WPA那个选项？ -->
@@ -131,7 +117,6 @@
           document.getElementById("password").required=true;
           document.getElementById("password").style.display='';
         }
-        console.log(value);
       }
     </script>
   </body>

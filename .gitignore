@@ -8,3 +8,6 @@ node_modules
 
 #spiffs
 data 
+
+# gz
+*.gz

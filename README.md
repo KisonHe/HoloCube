@@ -18,3 +18,4 @@ npm i lv_img_conv
 
 ## Wifi 
 https://iotespresso.com/create-captive-portal-using-esp32/
+Run `putHTML.py` to update the portal html code

@@ -2,6 +2,7 @@
 #include <WiFi.h>
 #include <AsyncTCP.h>
 #include "ESPAsyncWebServer.h"
+#include "wifihtml.h"
 
 DNSServer dnsServer;
 AsyncWebServer server(80);
@@ -10,27 +11,6 @@ String user_name;
 String proficiency;
 bool name_received = false;
 bool proficiency_received = false;
-
-const char index_html[] PROGMEM = R"rawliteral(
-<!DOCTYPE HTML><html><head>
-  <title>Captive Portal Demo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  </head><body>
-  <h3>Captive Portal Demo</h3>
-  <br><br>
-  <form action="/get">
-    <br>
-    Name: <input type="text" name="name">
-    <br>
-    ESP32 Proficiency: 
-    <select name = "proficiency">
-      <option value=Beginner>Beginner</option>
-      <option value=Advanced>Advanced</option>
-      <option value=Pro>Pro</option>
-    </select>
-    <input type="submit" value="Submit">
-  </form>
-</body></html>)rawliteral";
 
 class CaptiveRequestHandler : public AsyncWebHandler {
 public:
@@ -43,13 +23,19 @@ public:
   }
 
   void handleRequest(AsyncWebServerRequest *request) {
-    request->send_P(200, "text/html", index_html); 
+    AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", WiFiPortal_html_gz, WiFiPortal_html_gz_len);
+    response->addHeader("Content-Encoding","gzip");
+    request->send(response);
+    // request->send_P(200, "text/html", index_html); 
   }
 };
 
 void setupServer(){
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-      request->send_P(200, "text/html", index_html); 
+      // request->send_P(200, "text/html", index_html); 
+      AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", WiFiPortal_html_gz, WiFiPortal_html_gz_len);
+      response->addHeader("Content-Encoding","gzip");
+      request->send(response);
       Serial.println("Client Connected");
   });
     
