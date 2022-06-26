@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple registration form</title>
+
+    <style>
+      html, body {
+      display: flex;
+      justify-content: center;
+      height: 100%;
+      }
+      body, div, h1, form, input, p { 
+      padding: 0;
+      margin: 0;
+      outline: none;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 16px;
+      color: #666;
+      }
+      h1 {
+      padding: 10px 0;
+      font-size: 32px;
+      font-weight: 300;
+      text-align: center;
+      }
+      p {
+      font-size: 12px;
+      }
+      hr {
+      color: #a9a9a9;
+      opacity: 0.3;
+      }
+      .main-block {
+      max-width: 340px; 
+      min-height: 460px; 
+      padding: 10px 0;
+      margin: auto;
+      border-radius: 5px; 
+      border: solid 1px #ccc;
+      box-shadow: 1px 2px 5px rgba(0,0,0,.31); 
+      background: #ebebeb; 
+      }
+      form {
+      margin: 0 30px;
+      }
+      input[type=radio]:checked + label:after {
+      opacity: 1;
+      }
+      input{
+      width: calc(100% - 57px);
+      height: 36px;
+      margin: 13px 0 0 -5px;
+      padding-left: 10px; 
+      border-radius: 0 5px 5px 0;
+      border: solid 1px #cbc9c9; 
+      box-shadow: 1px 2px 5px rgba(0,0,0,.09); 
+      background: #fff; 
+      }
+      input[type=password] {
+      margin-bottom: 15px;
+      }
+      select{
+      width: calc(100% - 57px);
+      height: 36px;
+      margin: 13px 0 0 -5px;
+      padding-left: 10px; 
+      border-radius: 0 5px 5px 0;
+      border: solid 1px #cbc9c9; 
+      box-shadow: 1px 2px 5px rgba(0,0,0,.09); 
+      background: #fff; 
+      }
+      .btn-block {
+      margin-top: 10px;
+      text-align: center;
+      }
+      button {
+      width: 100%;
+      padding: 10px 0;
+      margin: 10px auto;
+      border-radius: 5px; 
+      border: none;
+      background: #1c87c9; 
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      }
+      button:hover {
+      background: #26a9e0;
+      }
+      label.EncryptListName, select.EncryptList{
+        display:inline-block;margin-right:10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-block">
+      <h1>连接HoloCube到WiFi</h1>
+      <form action="/">
+        <input type="text"id="name" placeholder="WiFi Name" required/>
+        <hr><label>加密方式</label><br>
+            <select id="EncryptList" onchange="onEncryptListChange(this)">
+            <!-- 其实用户要是要连没密码WiFi应该知道点一下WPA那个选项？ -->
+            <!-- <option value="" disabled selected>请选择加密方式</option> -->
+            <option value="WPA2-PSK">WPA2-PSK</option>
+            <option value="None">None</option>
+            </select>
+        <input type="password" id="password" placeholder="Password" required/>
+        <hr>
+        <div class="btn-block">
+          <p>您仍然可以在HoloCube的 Settngs App中更改WiFi设置</p>
+          <button type="submit" href="/">连接到WiFi</button>
+        </div>
+      </form>
+    </div>
+    <script>
+      function onEncryptListChange(selectObject){
+        var value = selectObject.value;  
+        if (value === "None"){
+          document.getElementById("password").required=false;
+          document.getElementById("password").style.display='none';
+        }
+        else{
+          document.getElementById("password").required=true;
+          document.getElementById("password").style.display='';
+        }
+        console.log(value);
+      }
+    </script>
+  </body>
+</html>

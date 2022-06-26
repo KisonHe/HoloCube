@@ -1,48 +1,159 @@
-#include <Arduino.h>
-#include "gui/gui.h"
-#include "SPIFFS.h"
-#include "btn_cb.h"
-#include "gui/app/app.h"
-button mybutton1({14},1,{buttonDefaultConfig});
-button mybutton2({21},2,{buttonDefaultConfig});
-button mybutton3({27},3,{buttonDefaultConfig});
-void setup()
-{
-    // Serial.begin(115200);
-    // log_i("in setup app_list %x is %d long",app_t::app_list_ptr,app_t::app_list_ptr->size());
-    log_d("CPU Freq: %d",getCpuFrequencyMhz());
-    ButtonEventHandler = indrv::btn_handler;
-    button::setUp(buttonDefaultSetup);
+#include <DNSServer.h>
+#include <WiFi.h>
+#include <AsyncTCP.h>
+#include "ESPAsyncWebServer.h"
+
+DNSServer dnsServer;
+AsyncWebServer server(80);
+
+String user_name;
+String proficiency;
+bool name_received = false;
+bool proficiency_received = false;
+
+const char index_html[] PROGMEM = R"rawliteral(
+<!DOCTYPE HTML><html><head>
+  <title>Captive Portal Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+  <h3>Captive Portal Demo</h3>
+  <br><br>
+  <form action="/get">
+    <br>
+    Name: <input type="text" name="name">
+    <br>
+    ESP32 Proficiency: 
+    <select name = "proficiency">
+      <option value=Beginner>Beginner</option>
+      <option value=Advanced>Advanced</option>
+      <option value=Pro>Pro</option>
+    </select>
+    <input type="submit" value="Submit">
+  </form>
+</body></html>)rawliteral";
+
+class CaptiveRequestHandler : public AsyncWebHandler {
+public:
+  CaptiveRequestHandler() {}
+  virtual ~CaptiveRequestHandler() {}
+
+  bool canHandle(AsyncWebServerRequest *request){
+    //request->addInterestingHeader("ANY");
+    return true;
+  }
+
+  void handleRequest(AsyncWebServerRequest *request) {
+    request->send_P(200, "text/html", index_html); 
+  }
+};
+
+void setupServer(){
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+      request->send_P(200, "text/html", index_html); 
+      Serial.println("Client Connected");
+  });
     
-    pinMode(22, OUTPUT);
-    if (!SPIFFS.begin()){
-        log_e("SPIFFS Mount Failed");
-    }
-    else{
-        log_i("SPIFFS Mounted");
-        // File root = SPIFFS.open("/");
-        // File file = root.openNextFile(); 
-        // while(file){
-        //     Serial.print("FILE: ");
-        //     Serial.println(file.name());
-        //     file = root.openNextFile();
-        // }
-    }
-    guiSetUp();digitalWrite(22,HIGH);
+  server.on("/get", HTTP_GET, [] (AsyncWebServerRequest *request) {
+      String inputMessage;
+      String inputParam;
+  
+      if (request->hasParam("name")) {
+        inputMessage = request->getParam("name")->value();
+        inputParam = "name";
+        user_name = inputMessage;
+        Serial.println(inputMessage);
+        name_received = true;
+      }
+
+      if (request->hasParam("proficiency")) {
+        inputMessage = request->getParam("proficiency")->value();
+        inputParam = "proficiency";
+        proficiency = inputMessage;
+        Serial.println(inputMessage);
+        proficiency_received = true;
+      }
+      request->send(200, "text/html", "The values entered by you have been successfully sent to the device <br><a href=\"/\">Return to Home Page</a>");
+  });
 }
 
-void loop()
-{
-    // printf("%d\n",GPIO_ns::Read({14}));
-    // vTaskDelay(1000);
-    // Serial.println(GIT_REV);
-    // log_w("Set to High");
-    // digitalWrite(22,HIGH);
-    vTaskDelay(5);
-    // log_w("Set to Low");
-    // digitalWrite(22,LOW);
-    // vTaskDelay(5);
+
+void setup(){
+  //your other setup stuff...
+  Serial.begin(115200);
+  Serial.println();
+  Serial.println("Setting up AP Mode");
+  WiFi.mode(WIFI_AP); 
+  WiFi.softAP("esp-captive");
+  Serial.print("AP IP address: ");Serial.println(WiFi.softAPIP());
+  Serial.println("Setting up Async WebServer");
+  setupServer();
+  Serial.println("Starting DNS Server");
+  dnsServer.start(53, "*", WiFi.softAPIP());
+  server.addHandler(new CaptiveRequestHandler()).setFilter(ON_AP_FILTER);//only when requested from AP
+  //more handlers...
+  server.begin();
+  Serial.println("All Done!");
 }
+
+void loop(){
+  dnsServer.processNextRequest();
+  if(name_received && proficiency_received){
+      Serial.print("Hello ");Serial.println(user_name);
+      Serial.print("You have stated your proficiency to be ");Serial.println(proficiency);
+      name_received = false;
+      proficiency_received = false;
+      Serial.println("We'll wait for the next client now");
+    }
+}
+
+
+
+
+// #include <Arduino.h>
+// #include "gui/gui.h"
+// #include "SPIFFS.h"
+// #include "btn_cb.h"
+// #include "gui/app/app.h"
+// button mybutton1({14},1,{buttonDefaultConfig});
+// button mybutton2({21},2,{buttonDefaultConfig});
+// button mybutton3({27},3,{buttonDefaultConfig});
+// void setup()
+// {
+//     // Serial.begin(115200);
+//     // log_i("in setup app_list %x is %d long",app_t::app_list_ptr,app_t::app_list_ptr->size());
+//     log_d("CPU Freq: %d",getCpuFrequencyMhz());
+//     ButtonEventHandler = indrv::btn_handler;
+//     button::setUp(buttonDefaultSetup);
+    
+//     pinMode(22, OUTPUT);
+//     if (!SPIFFS.begin()){
+//         log_e("SPIFFS Mount Failed");
+//     }
+//     else{
+//         log_i("SPIFFS Mounted");
+//         // File root = SPIFFS.open("/");
+//         // File file = root.openNextFile(); 
+//         // while(file){
+//         //     Serial.print("FILE: ");
+//         //     Serial.println(file.name());
+//         //     file = root.openNextFile();
+//         // }
+//     }
+//     guiSetUp();digitalWrite(22,HIGH);
+// }
+
+// void loop()
+// {
+//     // printf("%d\n",GPIO_ns::Read({14}));
+//     // vTaskDelay(1000);
+//     // Serial.println(GIT_REV);
+//     // log_w("Set to High");
+//     // digitalWrite(22,HIGH);
+//     vTaskDelay(5);
+//     // log_w("Set to Low");
+//     // digitalWrite(22,LOW);
+//     // vTaskDelay(5);
+// }
 
 // //--------------------------------
 // #include <Arduino.h>
