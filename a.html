@@ -4,6 +4,9 @@
     <title>Simple registration form</title>
 
     <style>
+      :root{
+        font-size: 16px;
+      }
       html, body {
       display: flex;
       justify-content: center;
@@ -14,43 +17,48 @@
       margin: 0;
       outline: none;
       font-family: Roboto, Arial, sans-serif;
-      font-size: 16px;
+      font-size: 1rem;
       color: #666;
       }
       h1 {
-      padding: 10px 0;
-      font-size: 32px;
+      padding: 0.625rem 0;
+      font-size: 2rem;
       font-weight: 300;
       text-align: center;
       }
       p {
-      font-size: 12px;
+      font-size: 0.75rem;
       }
       hr {
       color: #a9a9a9;
       opacity: 0.3;
       }
       .main-block {
-      max-width: 340px; 
-      min-height: 460px; 
-      padding: 10px 0;
+      /* max-width: 21.25rem;  */
+      /* min-height: 28.75rem;  */
+      padding: 0.625rem 0;
       margin: auto;
       border-radius: 5px; 
       border: solid 1px #ccc;
       box-shadow: 1px 2px 5px rgba(0,0,0,.31); 
       background: #ebebeb; 
       }
+      @media screen and (max-width: 768px) {
+        .main-block{
+          zoom: 2.5;
+        }
+      }
       form {
-      margin: 0 30px;
+      margin: 0 1.875rem;
       }
       input[type=radio]:checked + label:after {
       opacity: 1;
       }
       input{
       width: calc(100% - 57px);
-      height: 36px;
+      height: 2.25rem;
       margin: 13px 0 0 -5px;
-      padding-left: 10px; 
+      padding-left: 0.625rem; 
       border-radius: 0 5px 5px 0;
       border: solid 1px #cbc9c9; 
       box-shadow: 1px 2px 5px rgba(0,0,0,.09); 
@@ -63,20 +71,20 @@
       width: calc(100% - 57px);
       height: 36px;
       margin: 13px 0 0 -5px;
-      padding-left: 10px; 
+      padding-left: 0.625rem; 
       border-radius: 0 5px 5px 0;
       border: solid 1px #cbc9c9; 
       box-shadow: 1px 2px 5px rgba(0,0,0,.09); 
       background: #fff; 
       }
       .btn-block {
-      margin-top: 10px;
+      margin-top: 0.625rem;
       text-align: center;
       }
       button {
       width: 100%;
-      padding: 10px 0;
-      margin: 10px auto;
+      padding: 0.625rem 0;
+      margin: 0.625rem auto;
       border-radius: 5px; 
       border: none;
       background: #1c87c9; 
@@ -88,7 +96,7 @@
       background: #26a9e0;
       }
       label.EncryptListName, select.EncryptList{
-        display:inline-block;margin-right:10px;
+        display:inline-block;margin-right:0.625rem;
       }
     </style>
   </head>
