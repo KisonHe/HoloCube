@@ -53,6 +53,9 @@ static void my_disp_flush( lv_disp_drv_t *disp, const lv_area_t *area, lv_color_
 static void lvgl_task(TimerHandle_t xTimer)
 {
     xSemaphoreTake(lvgl_lock,portMAX_DELAY);
+    // lv_obj_t * gyroimg = lv_img_create(lv_scr_act());
+    // lv_img_set_src(gyroimg, "S:/spiffs/google.bin");
+    // lv_obj_set_align(gyroimg,LV_ALIGN_TOP_MID);
 
     load_common_style();
     strings::kh_load_all_font();
@@ -117,6 +120,7 @@ void guiSetUp(){
     disp_drv.flush_cb = my_disp_flush;
     disp_drv.draw_buf = &draw_buf;
     lv_disp_drv_register( &disp_drv );
+    lv_fs_init();
     xSemaphoreGive(lvgl_lock);
 
     xTaskCreatePinnedToCore(lvgl_task,

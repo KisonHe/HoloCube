@@ -3,10 +3,11 @@
 #include "gui/style/style.h"
 // #include <FastLED.h>
 char tomato_app_name[] = "Tomato Timer";
-LV_IMG_DECLARE(tomato);
+// LV_IMG_DECLARE(tomato);
+LV_IMG_DECLARE(wifi);
 static app_info_t tomato_app_info = {
 .name = tomato_app_name,
-.logo = tomato
+.logo = wifi
 };
 
 tomato_timer::tomato_timer(/* args */):app_t(true,nullptr,&tomato_app_info)

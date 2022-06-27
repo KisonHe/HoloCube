@@ -118,18 +118,22 @@ TickType_t mainmenu_app_t::handle(TickType_t tick){
             lv_anim_start(&pre_app);
 
             busy = true;
+            log_w("Switch app anime begin");
             return 1;
         }
-        if (busy){
-            if (!lv_anim_count_running()) {
-                busy=false;
-                lv_obj_del(now_app_container);
-                now_app_container = next_app_container;
-            }
-        }
-    }else{
-        // Only one app. Maybe add some anime
     }
+    if (busy){
+        if (!lv_anim_count_running()) {
+            log_w("Switch app anime Done");
+            busy=false;
+            lv_obj_del(now_app_container);
+            now_app_container = next_app_container;
+        }
+    }
+    // }else{
+        // Only one app. Maybe add some anime
+        // log_w("User try to switch app but only one app in list");
+    // }
     return 1;
 }
 void mainmenu_app_t::deinit(TickType_t tick){
@@ -165,9 +169,9 @@ lv_obj_t* mainmenu_app_t::create_app_ctr(lv_obj_t * parent, app_info_t* app_info
     lv_obj_align(ret, LV_ALIGN_CENTER, 0, 0);
 
     lv_obj_t* app_image = lv_img_create(ret);
-    the_app->init_app_info(app_image);
-    
     lv_img_set_src(app_image, &app_info->logo);
+    the_app->init_app_info(app_image);  // This runs after lv_img_set_src logo so overwrite is possible
+    
     lv_obj_align(app_image, LV_ALIGN_CENTER, 0, 0);
     lv_obj_t* app_name = lv_label_create(ret);
     assert(app_name!=nullptr);

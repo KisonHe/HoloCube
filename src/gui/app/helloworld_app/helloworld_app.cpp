@@ -1,23 +1,23 @@
 #include "helloworld_app.h"
 #include <Arduino.h>
-LV_IMG_DECLARE(google);
+LV_IMG_DECLARE(placeholder_img);
 // lv_obj_t* helloworld_app_logo;
 
 char helloworld_app_name[] = "hello world app";
 
 static app_info_t hello_world_app_info = {
 .name = helloworld_app_name,
-.logo = google
+.logo = placeholder_img
 };
 
 static app_info_t hello_world_app_info_2 = {
 .name = "another hello world app",
-.logo = google
+.logo = placeholder_img
 };
-// helloworld_app main_helloworld_app(&hello_world_app_info);
+helloworld_app main_helloworld_app(&hello_world_app_info);
 // helloworld_app main_helloworld_app_2(&hello_world_app_info_2);
 
-helloworld_app::helloworld_app(app_info_t* app_info):app_t(false,nullptr,app_info)
+helloworld_app::helloworld_app(app_info_t* app_info):app_t(true,nullptr,app_info)
 // helloworld_app::helloworld_app(/* args */):app_t(false,nullptr,nullptr)
 {
     log_v("hello world constructor of %x, Now app_list is %d long",this,app_list_ptr->size());

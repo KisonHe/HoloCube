@@ -3,36 +3,126 @@
 #include "SPIFFS.h"
 #include "btn_cb.h"
 #include "gui/app/app.h"
+#include <DNSServer.h>
+#include <WiFi.h>
+#include <AsyncTCP.h>
+#include "ESPAsyncWebServer.h"
+#include "wifihtml.h"
 button mybutton1({14},1,{buttonDefaultConfig});
 button mybutton2({21},2,{buttonDefaultConfig});
 button mybutton3({27},3,{buttonDefaultConfig});
+
+
+// DNSServer dnsServer;
+// AsyncWebServer server(80);
+
+// String user_name;
+// String proficiency;
+// bool name_received = false;
+// bool proficiency_received = false;
+
+// class CaptiveRequestHandler : public AsyncWebHandler {
+// public:
+//   CaptiveRequestHandler() {}
+//   virtual ~CaptiveRequestHandler() {}
+
+//   bool canHandle(AsyncWebServerRequest *request){
+//     //request->addInterestingHeader("ANY");
+//     return true;
+//   }
+
+//   void handleRequest(AsyncWebServerRequest *request) {
+//     AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", WiFiPortal_html_gz, WiFiPortal_html_gz_len);
+//     response->addHeader("Content-Encoding","gzip");
+//     request->send(response);
+//     // request->send_P(200, "text/html", index_html); 
+//   }
+// };
+
+// void setupServer(){
+//   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+//       // request->send_P(200, "text/html", index_html); 
+//       AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", WiFiPortal_html_gz, WiFiPortal_html_gz_len);
+//       response->addHeader("Content-Encoding","gzip");
+//       request->send(response);
+//       Serial.println("Client Connected");
+//   });
+    
+//   server.on("/get", HTTP_GET, [] (AsyncWebServerRequest *request) {
+//       String inputMessage;
+//       String inputParam;
+  
+//       if (request->hasParam("name")) {
+//         inputMessage = request->getParam("name")->value();
+//         log_w("Got param name %s",inputMessage.c_str());
+//         fflush(stdout);
+//       }
+
+//       if (request->hasParam("type")) {
+//         inputMessage = request->getParam("type")->value();
+//         log_w("Got param type %s",inputMessage.c_str());
+//         fflush(stdout);
+//       }
+
+//       if (request->hasParam("password")) {
+//         inputMessage = request->getParam("password")->value();
+//         log_w("Got param password %s",inputMessage.c_str());
+//         fflush(stdout);
+//       }
+//       request->send(200, "text/html", "The values entered by you have been successfully sent to the device <br><a href=\"/\">Return to Home Page</a>");
+//   });
+// }
+
+
 void setup()
 {
-    // Serial.begin(115200);
+    vTaskDelay(200);
+    Serial.begin(115200);
     // log_i("in setup app_list %x is %d long",app_t::app_list_ptr,app_t::app_list_ptr->size());
     log_d("CPU Freq: %d",getCpuFrequencyMhz());
     ButtonEventHandler = indrv::btn_handler;
     button::setUp(buttonDefaultSetup);
     
     pinMode(22, OUTPUT);
+    vTaskDelay(1000);
     if (!SPIFFS.begin()){
         log_e("SPIFFS Mount Failed");
     }
     else{
         log_i("SPIFFS Mounted");
-        // File root = SPIFFS.open("/");
-        // File file = root.openNextFile(); 
-        // while(file){
-        //     Serial.print("FILE: ");
-        //     Serial.println(file.name());
-        //     file = root.openNextFile();
-        // }
+        File root = SPIFFS.open("/");
+        File file = root.openNextFile(); 
+        if (!file)
+          log_e("NoFile in SPIFFS");
+        while(file){
+            log_i("FILE: %s",file.name());
+            file = root.openNextFile();
+        }
     }
     guiSetUp();digitalWrite(22,HIGH);
+    // WiFi.mode(WIFI_AP); 
+  // WiFi.softAP("HoloCube_WiFi");
+  // Serial.print("AP IP address: ");Serial.println(WiFi.softAPIP());
+  // Serial.println("Setting up Async WebServer");
+  // setupServer();
+  // Serial.println("Starting DNS Server");
+  // dnsServer.start(53, "*", WiFi.softAPIP());
+  // server.addHandler(new CaptiveRequestHandler()).setFilter(ON_AP_FILTER);//only when requested from AP
+  // //more handlers...
+  // server.begin();
+  // Serial.println("All Done!");
 }
 
 void loop()
 {
+    // dnsServer.processNextRequest();
+    // if(name_received && proficiency_received){
+    //   Serial.print("Hello ");Serial.println(user_name);
+    //   Serial.print("You have stated your proficiency to be ");Serial.println(proficiency);
+    //   name_received = false;
+    //   proficiency_received = false;
+    //   Serial.println("We'll wait for the next client now");
+    // }
     // printf("%d\n",GPIO_ns::Read({14}));
     // vTaskDelay(1000);
     // Serial.println(GIT_REV);

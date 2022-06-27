@@ -6,8 +6,8 @@
 node_modules
 # So no need to ignore package-lock.json # https://stackoverflow.com/questions/44206782/do-i-commit-the-package-lock-json-file-created-by-npm-5
 
-#spiffs
-data 
+# #spiffs
+# data 
 
 # gz
 *.gz
